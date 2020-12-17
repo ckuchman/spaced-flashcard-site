@@ -7,14 +7,26 @@ function LandingPage() {
       <Container
         className="center"
         fluid="md"
-        style={{ textAlign: "center", marginTop: "20%" }}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          marginTop: "20%",
+        }}
       >
         <head>
           <title>Spaced Flashcards Project - OSU Winter Hackathon 2020</title>
         </head>
         <h1>Spaced Flashcards</h1>
 
-        <Card>
+        <Card
+          style={{
+            width: "50%",
+            flex: "1",
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
           <Card.Body>
             <Card.Title>A Proven System</Card.Title>
             <Card.Text>
@@ -22,7 +34,9 @@ function LandingPage() {
               strategy for memory retention and learning. What topic would you
               like to know more completely?
             </Card.Text>
-            <Button variant="primary">Login</Button>
+            <Button style={{ marginRight: "25px" }} variant="primary">
+              Login
+            </Button>
             <Button variant="primary">Register in Seconds</Button>
           </Card.Body>
         </Card>
