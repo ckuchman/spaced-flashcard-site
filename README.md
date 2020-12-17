@@ -33,3 +33,15 @@ Do the following commands at the top-level directory
 1. Click OK in the Environment Variables dialog box.
 
 ---
+
+
+# Frontend Setup
+Go into the client directory and execute:
+1. `npm install`
+2. `npm run start`
+
+development version of the app can then be accessed at:
+`localhost:3000`
+
+---
+
