@@ -3,43 +3,37 @@ import "./App.css";
 import { Button, Container } from "react-bootstrap";
 import LandingPage from "./components/landing";
 import NavBar from "./components/navbar";
-import { SnackbarProvider } from "notistack";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Register from "./components/register";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const notistackRef = React.createRef();
-  const onClickDismiss = (key) => () => {
-    notistackRef.current.closeSnackbar(key);
-  };
   return (
     <>
-      <SnackbarProvider
-        style={{ marginTop: 75 }}
-        maxSnack={1}
-        autoHideDuration={3000}
-        ref={notistackRef}
-        action={(key) => (
-          <Button style={{ color: "white" }} onClick={onClickDismiss(key)}>
-            Dismiss
-          </Button>
-        )}
-      >
-        <Router>
-          <NavBar />
-          <Container
-            className="center"
-            fluid="md"
-            style={{ textAlign: "center", marginTop: "10%" }}
-          >
-            <Switch>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+      />
+      <Router>
+        <NavBar />
+        <Container
+          className="center"
+          fluid="md"
+          style={{ textAlign: "center", marginTop: "10%" }}
+        >
+          <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/register" component={Register} />
-
-            </Switch>
-          </Container>
-        </Router>
-      </SnackbarProvider>
+          </Switch>
+        </Container>
+      </Router>
     </>
   );
 }
