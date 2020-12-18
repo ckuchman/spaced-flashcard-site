@@ -38,7 +38,7 @@ async function updateUserData() {
 
 /* if new user has registered, logs them in and sets state */
 function newUser(res) {
-  if (!res.accessToken || !res.userData) {
+  if (!res.refresh || !res.access) {
     /* should not be possible */
     return logout();
   }
@@ -53,7 +53,7 @@ async function authHeader() {
   if (currentUser && currentUser.accessToken) {
     return {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${currentUser.accessToken}`,
+      Authorization: `JWT ${currentUser.accessToken}`,
     };
   } else {
     return {};

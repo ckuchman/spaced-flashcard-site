@@ -3,8 +3,12 @@ import { Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { fetchCall } from "./helpers";
+import { authService } from "./auth-service";
+import {useHistory} from 'react-router-dom';
 
 export default function Register() {
+  const history = useHistory();
   const requiredMsg = "This field is required!!";
   const initialValues = {
     email: "",
@@ -13,14 +17,36 @@ export default function Register() {
     confirmPassword: "",
   };
 
-  function handleSubmit(fields) {
+  async function handleSubmit(fields) {
     console.log(fields);
     alert(`submit registration data to backend: ${JSON.stringify(fields)}`);
     const { email, username, password } = fields;
+    let payload = {
+      url: process.env.REACT_APP_BASE_URL + "auth/users/",
+      method: "POST",
+      auth: false,
+      body: {
+        username: username,
+        email: email,
+        password: password,
+      },
+    };
+    let response = await fetchCall(payload);
+    console.log(`response to register user call is: ${JSON.stringify(response)}`);
+
+    /* now that user has been created, get the jwt */
+    payload.url = process.env.REACT_APP_BASE_URL + "auth/jwt/create/";
+    let jwtresponse = await fetchCall(payload);
+    jwtresponse.userData = fields;
+    console.log(`response to jwt call is: ${JSON.stringify(jwtresponse)}`);
+    authService.newUser(jwtresponse);
+    history.push("/profile")
+    
+
     return;
   }
 
-  console.log(`the base url is: ${process.env.REACT_APP_BASE_URL}`)
+  console.log(`the base url is: ${process.env.REACT_APP_BASE_URL}`);
 
   return (
     <>
@@ -70,16 +96,13 @@ export default function Register() {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="username">Username</label>
-                  <Subtitle>Can be your email address</Subtitle>
+                  <label htmlFor="username">Username (email)</label>
                   <Field
                     name="username"
                     type="text"
                     className={
                       "form-control" +
-                      (errors.username && touched.username
-                        ? " is-invalid"
-                        : "")
+                      (errors.username && touched.username ? " is-invalid" : "")
                     }
                   />
                   <ErrorMessage
