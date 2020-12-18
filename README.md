@@ -6,8 +6,8 @@ OSU Winter 2021 Hackathon - Spaced Repetition Flashcard Site
 # Backend Setup
 Do the following commands at the top-level directory
 1. `python -m venv env`
-1. `source env/bin/activate`
-1. `pip3 install django`
+1. `source env/bin/activate` or `env/scripts/activate` on Windows
+1. `python -m pip install -r requirements.txt`
 
 ---
 
@@ -31,6 +31,9 @@ Do the following commands at the top-level directory
 1. In the User variables section, click New to open the New User Variable dialog box.
 1. Enter 'SECRET_KEY' and its value, and click OK. The variable is added to the User variables section of the Environment Variables dialog box.
 1. Click OK in the Environment Variables dialog box.
+
+### Adding requirements
+1. `python -m pip freeze > requirements.txt`
 
 ---
 
