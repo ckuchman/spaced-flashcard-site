@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Register from "./components/register";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Login from "./components/login";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
           </Switch>
         </Container>
       </Router>
