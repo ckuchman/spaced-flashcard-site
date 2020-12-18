@@ -13,6 +13,9 @@ client/coverage
 # production
 client/build
 
+# database
+server/db.sqlite3
+
 # misc
 **/.DS_Store
 **/.env.local
@@ -35,3 +38,4 @@ client/build
 **/.eslintcache
 **/.vscode
 **/__pycache__
+*.pyc
