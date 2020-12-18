@@ -8,6 +8,9 @@ import Register from "./components/register";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./components/login";
+import { authService } from "./components/auth-service";
+import PrivateRoute from "./components/protected-route";
+import Profile from "./components/profile";
 
 function App() {
   return (
@@ -33,6 +36,7 @@ function App() {
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <PrivateRoute exact path="/profile" component={Profile} />
           </Switch>
         </Container>
       </Router>
