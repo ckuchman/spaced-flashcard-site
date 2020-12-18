@@ -7,9 +7,8 @@ import * as Yup from "yup";
 export default function Register() {
   const requiredMsg = "This field is required!!";
   const initialValues = {
-    firstName: "",
-    lastName: "",
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   };
@@ -17,9 +16,11 @@ export default function Register() {
   function handleSubmit(fields) {
     console.log(fields);
     alert(`submit registration data to backend: ${JSON.stringify(fields)}`);
-    const { firstName, lastName, email, password } = fields;
+    const { email, username, password } = fields;
     return;
   }
+
+  console.log(`the base url is: ${process.env.REACT_APP_BASE_URL}`)
 
   return (
     <>
@@ -36,11 +37,10 @@ export default function Register() {
           <Formik
             initialValues={initialValues}
             validationSchema={Yup.object().shape({
-              firstName: Yup.string().required(requiredMsg),
-              lastName: Yup.string().required(requiredMsg),
               email: Yup.string()
                 .email("Email is invalid!!")
                 .required(requiredMsg),
+              username: Yup.string().required(requiredMsg),
               password: Yup.string()
                 .min(6, "Password must be at least 6 characters!!")
                 .required(requiredMsg),
@@ -54,40 +54,6 @@ export default function Register() {
             render={({ errors, touched }) => (
               <Form>
                 <div className="form-group">
-                  <label htmlFor="firstName">First Name</label>
-                  <Field
-                    name="firstName"
-                    type="text"
-                    className={
-                      "form-control" +
-                      (errors.firstName && touched.firstName
-                        ? " is-invalid"
-                        : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="firstName"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name</label>
-                  <Field
-                    name="lastName"
-                    type="text"
-                    className={
-                      "form-control" +
-                      (errors.lastName && touched.lastName ? " is-invalid" : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="lastName"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-                </div>
-                <div className="form-group">
                   <label htmlFor="email">Email</label>
                   <Field
                     name="email"
@@ -99,6 +65,25 @@ export default function Register() {
                   />
                   <ErrorMessage
                     name="email"
+                    component="div"
+                    className="invalid-feedback"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="username">Username</label>
+                  <Subtitle>Can be your email address</Subtitle>
+                  <Field
+                    name="username"
+                    type="text"
+                    className={
+                      "form-control" +
+                      (errors.username && touched.username
+                        ? " is-invalid"
+                        : "")
+                    }
+                  />
+                  <ErrorMessage
+                    name="username"
                     component="div"
                     className="invalid-feedback"
                   />
