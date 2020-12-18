@@ -31,3 +31,7 @@ client/build
 # output logs
 **/output.log
 **/.idea
+
+**/.eslintcache
+**/.vscode
+**/__pycache__
