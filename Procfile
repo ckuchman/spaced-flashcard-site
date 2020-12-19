@@ -1,2 +1,2 @@
-release: python manage.py migrate
-web: gunicorn spaced-flashcard-site.wsgi --log-file -
+release: python server/manage.py migrate
+web: gunicorn --pythonpath server server.wsgi --log-file -

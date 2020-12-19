@@ -15,6 +15,7 @@ Including another URLconf
 """
 
 from django.urls import include, path, re_path
+from . import views
 # from rest_framework import routers
 
 # router = routers.DefaultRouter()
@@ -24,7 +25,9 @@ from django.urls import include, path, re_path
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     # path('', include(router.urls)),
+    path('api/hello/', views.hello, name='hello'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path(r'^auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.jwt')),
+    re_path(r'', views.index, name="index")
 ]
