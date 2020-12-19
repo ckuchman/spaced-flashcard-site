@@ -148,8 +148,6 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 django_on_heroku.settings(locals())
