@@ -11,7 +11,7 @@ env
 client/coverage
 
 # production
-client/build
+# client/build
 
 # database
 server/db.sqlite3
