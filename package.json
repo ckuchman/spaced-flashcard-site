@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "yarn --cwd ./client",
-    "build": "yarn --cwd ./client serve"
+    "postinstall": "npm cd ./client",
+    "build": "npm cd ./client serve"
   }
 }
