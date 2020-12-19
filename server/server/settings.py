@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'djoser',
 
     # own
-
+    'deck',
+    'card',
 ]
 
 MIDDLEWARE = [
@@ -149,7 +150,7 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:3000"
 ]
 
 django_on_heroku.settings(locals())
