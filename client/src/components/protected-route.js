@@ -16,20 +16,26 @@ const PrivateRoute = (props) => {
         )
       ? false
       : true;
-  if (!authenticated) authService.logout();
+  if (!authenticated) {
+    console.log("trying to log this guy out");
+    authService.logout();
+    return <Redirect to="/login" />;
+  }
   /* refresh the token */
+  /* get the localstorage data */
   let payload = {
     url: process.env.REACT_APP_BASE_URL + "auth/jwt/refresh/",
     method: "POST",
     auth: false,
     body: {
-      refresh: authService.currentUserValue.refresh
-    }
-  }
+      refresh: authService.currentUserValue.refresh,
+    },
+  };
   fetchCall(payload).then((response) => {
-    console.log(response);
-  })
-
+    let local = JSON.parse(localStorage.getItem("currentUser"));
+    local.access = response.access;
+    localStorage.setItem("currentUser", JSON.stringify(local));
+  });
 
   return authenticated ? (
     <Route path={props.path} exact={props.exact}>

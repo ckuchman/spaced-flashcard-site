@@ -5,7 +5,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { fetchCall } from "./helpers";
 import { authService } from "./auth-service";
-import {useHistory} from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 export default function Register() {
   const history = useHistory();
@@ -32,16 +32,17 @@ export default function Register() {
       },
     };
     let response = await fetchCall(payload);
-    console.log(`response to register user call is: ${JSON.stringify(response)}`);
+    console.log(
+      `response to register user call is: ${JSON.stringify(response)}`
+    );
 
     /* now that user has been created, get the jwt */
     payload.url = process.env.REACT_APP_BASE_URL + "auth/jwt/create/";
     let jwtresponse = await fetchCall(payload);
-    jwtresponse.userData = fields;
+    jwtresponse.userData = { username, email };
     console.log(`response to jwt call is: ${JSON.stringify(jwtresponse)}`);
     authService.newUser(jwtresponse);
-    history.push("/profile")
-    
+    history.push("/profile");
 
     return;
   }

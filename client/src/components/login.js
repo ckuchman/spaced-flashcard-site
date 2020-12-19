@@ -3,19 +3,42 @@ import { Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { fetchCall } from "./helpers";
+import { authService } from "./auth-service";
+import { useHistory } from "react-router-dom";
 
 export default function Login() {
+  const history = useHistory();
   const requiredMsg = "This field is required!!";
   const initialValues = {
-    email: "",
+    username: "",
     password: "",
   };
 
-  function handleSubmit(fields) {
+  async function handleSubmit(fields) {
     console.log(fields);
-    alert(`submit registration data to backend: ${JSON.stringify(fields)}`);
-    const { firstName, lastName, email, password } = fields;
-    return;
+    alert(`submit login data to backend: ${JSON.stringify(fields)}`);
+    const { username, password } = fields;
+    let payload = {
+      url: process.env.REACT_APP_BASE_URL + "auth/jwt/create/",
+      method: "POST",
+      auth: false,
+      body: {
+        username: username,
+        password: password,
+      },
+    };
+    try {
+      let response = await fetchCall(payload);
+      response.userData = { username };
+      console.log(`response to login call is ${JSON.stringify(response)}`);
+      authService.login(response);
+      history.push("/profile");
+      return;
+    } catch (err) {
+      /* todo: error handling */
+      console.error(err);
+    }
   }
 
   return (
@@ -32,9 +55,7 @@ export default function Login() {
           <Formik
             initialValues={initialValues}
             validationSchema={Yup.object().shape({
-              email: Yup.string()
-                .email("Email is invalid!!")
-                .required(requiredMsg),
+              username: Yup.string().required(requiredMsg),
               password: Yup.string()
                 .min(6, "Password must be at least 6 characters!!")
                 .required(requiredMsg),
@@ -45,17 +66,17 @@ export default function Login() {
             render={({ errors, touched }) => (
               <Form>
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="username">Username (email)</label>
                   <Field
-                    name="email"
+                    name="username"
                     type="text"
                     className={
                       "form-control" +
-                      (errors.email && touched.email ? " is-invalid" : "")
+                      (errors.username && touched.username ? " is-invalid" : "")
                     }
                   />
                   <ErrorMessage
-                    name="email"
+                    name="username"
                     component="div"
                     className="invalid-feedback"
                   />
