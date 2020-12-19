@@ -1,9 +1,5 @@
 {
-  "name": "spaced-flashcard-site",
-  "version": "0.1.0",
-  "private": true,
   "scripts": {
-    "postinstall": "npm cd ./client",
-    "build": "npm cd ./client serve"
+    "start": "cd ./client"
   }
 }
