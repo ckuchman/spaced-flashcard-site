@@ -1,5 +1,6 @@
 {
   "scripts": {
-    "start": "cd ./client"
+    "start": "cd ./client",
+    "postinstall": "cd ./client && npm run build"
   }
 }
