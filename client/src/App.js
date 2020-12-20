@@ -12,6 +12,7 @@ import { authService } from "./components/auth-service";
 import PrivateRoute from "./components/protected-route";
 import Profile from "./components/profile";
 import CardDisplay from "./components/card-display";
+import RunDeck from "./components/run-deck";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/card" component={CardDisplay} />
+            <Route exact path="/rundeck" component={RunDeck} />
             <PrivateRoute exact path="/profile" component={Profile} />
           </Switch>
         </Container>
