@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -30,11 +30,24 @@ export default function Login() {
     };
     try {
       let response = await fetchCall(payload);
-      console.log(`the response is: ${JSON.stringify(response)}`);
       response.userData = { username };
       console.log(`response to login call is ${JSON.stringify(response)}`);
       authService.login(response);
-      history.push("/profile");
+      /* now fetch the userId */
+      console.log(authService.currentUserValue);
+      let idPayload = {
+        url: process.env.REACT_APP_BASE_URL + "auth/users/",
+        method: "GET",
+        auth: true,
+      };
+      let idResponse = await fetchCall(idPayload);
+      console.log(
+        `the response from getting id is: ${JSON.stringify(idResponse)}`
+      );
+      history.push({
+        pathname: "/profile",
+        state: idResponse[0],
+      });
       return;
     } catch (err) {
       /* todo: error handling */
