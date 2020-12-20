@@ -1,20 +1,48 @@
-import React from 'react';
-import { Container, Button } from "react-bootstrap";
+import React from "react";
+import { Container, Button, Row, Col } from "react-bootstrap";
 
 export default function RateCard(props) {
+  function handleClick(rating) {
+    props.handleRate(rating);
+  }
 
-    function handleClick(rating) {
-        console.log(`in ratecard handleclick, rating i was passed is ${rating}`);
-        props.handleRate(rating)
-    }
+  return (
+    <>
+      <Container>
+        <Row>
+          <Col>
+            <Button
+              variant="success"
+              onClick={() => {
+                handleClick("easy");
+              }}
+            >
+              Easy - 7 Days
+            </Button>
+          </Col>
 
-    return(
-        <>
-            <Container>
-                <Button onClick={alert("hey man i clicked easy")}>Easy</Button>
-                <Button onClick={handleClick("medium")}>Medium</Button>
-                <Button onClick={handleClick("hard")}>Hard</Button>
-            </Container>
-        </>
-        )
+          <Col>
+            <Button
+              variant="warning"
+              onClick={() => {
+                handleClick("medium");
+              }}
+            >
+              Medium - 7 Hours
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              variant="danger"
+              onClick={() => {
+                handleClick("hard");
+              }}
+            >
+              Hard -  7 Minutes
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
 }
