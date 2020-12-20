@@ -17,7 +17,7 @@ export default function Login() {
 
   async function handleSubmit(fields) {
     console.log(fields);
-    alert(`submit login data to backend: ${JSON.stringify(fields)}`);
+    // alert(`submit login data to backend: ${JSON.stringify(fields)}`);
     const { username, password } = fields;
     let payload = {
       url: process.env.REACT_APP_BASE_URL + "auth/jwt/create/",
@@ -30,6 +30,7 @@ export default function Login() {
     };
     try {
       let response = await fetchCall(payload);
+      console.log(`the response is: ${JSON.stringify(response)}`);
       response.userData = { username };
       console.log(`response to login call is ${JSON.stringify(response)}`);
       authService.login(response);
@@ -38,6 +39,10 @@ export default function Login() {
     } catch (err) {
       /* todo: error handling */
       console.error(err);
+      toast.error(`Invalid login info, please retry!`);
+      history.push("/");
+      history.push("/login");
+      return null;
     }
   }
 
