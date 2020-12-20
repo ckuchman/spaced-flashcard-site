@@ -9,6 +9,6 @@ class Deck(models.Model):
 
 
 class UserDeck(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    deck_id = models.ForeignKey(Deck, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    deck = models.ForeignKey(Deck, on_delete=models.SET_NULL, null=True)
     date_created = models.DateTimeField(null=True)

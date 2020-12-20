@@ -19,3 +19,4 @@ class CardViewSet(viewsets.ModelViewSet):
             serializer_class = CardSerializer
 
         return serializer_class
+
