@@ -34,10 +34,10 @@ function LandingPage() {
               strategy for memory retention and learning. What topic would you
               like to know more completely?
             </Card.Text>
-            <Button style={{ marginRight: "25px" }} variant="primary">
+            <Button style={{ marginRight: "25px" }} variant="primary" href="/login">
               Login
             </Button>
-            <Button variant="primary">Register in Seconds</Button>
+            <Button variant="primary" href="/register">Register in Seconds</Button>
           </Card.Body>
         </Card>
       </Container>
