@@ -40,9 +40,9 @@ export default function Login() {
       /* todo: error handling */
       console.error(err);
       toast.error(`Invalid login info, please retry!`);
-      history.push("/");
-      history.push("/login");
-      return null;
+      history.push("/temp");
+      history.goBack();
+      return;
     }
   }
 
