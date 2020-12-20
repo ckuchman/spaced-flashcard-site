@@ -41,12 +41,13 @@ class UserDeckViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def card_list(self, request):
+        """
+        API endpoint that lists the cards associated with userdeck.
+        """
 
         if 'userdeck' not in request.data:
             return Response({'error': 'must pass id value'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # user_deck = UserDeck.objects.get(pk=request.data['userdeck'])
-        # deck_id = user_deck.deck_id
         cards = Card.objects.all().filter(user_deck_id__exact=request.data['userdeck'])
         serializer = CardSerializer(cards, many=True)
 
