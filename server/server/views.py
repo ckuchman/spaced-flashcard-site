@@ -5,11 +5,7 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-print(f"base_dir is {BASE_DIR}")
-
-
-def hello(request):
-    return JsonResponse({'response_text': 'hello world!'})
+# print(f"base_dir is {BASE_DIR}")
 
 
 def index(request):
