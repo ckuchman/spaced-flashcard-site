@@ -50,10 +50,10 @@ function newUser(res) {
  * user, otherwise empty object if user not logged in */
 async function authHeader() {
   const currentUser = authService.currentUserValue;
-  if (currentUser && currentUser.accessToken) {
+  if (currentUser && currentUser.access) {
     return {
       "Content-Type": "application/json",
-      Authorization: `JWT ${currentUser.accessToken}`,
+      Authorization: `JWT ${currentUser.access}`,
     };
   } else {
     return {};
