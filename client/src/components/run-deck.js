@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import CardDisplay from "./card-display";
 import DeckInfo from "./deck-info";
+import { useHistory } from "react-router-dom";
 
 const sampleDeck = [
   { question: "2+2=", answer: "4" },
@@ -15,6 +16,7 @@ const sampleDeck = [
 
 /* props should contain either the deck card data itself or the deck_id */
 export default function RunDeck() {
+  let history = useHistory();
   const [cardIndex, setCardIndex] = useState(0);
 
   /* increases cardIndex to display the next card in deck */
@@ -28,6 +30,7 @@ export default function RunDeck() {
   }
 
   function redirectHome() {
+    history.push("/profile");
     return;
   }
 
