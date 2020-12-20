@@ -6,7 +6,7 @@ from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from deck.serializers import DeckSerializer, UserDeckSerializer
+from deck.serializers import DeckSerializer, UserDeckSerializer, UserDeckCreateSerializer
 from card.serializers import CardSerializer
 
 
@@ -25,8 +25,15 @@ class UserDeckViewSet(viewsets.ModelViewSet):
     API endpoint that allows user decks to be viewed or edited.
     """
     queryset = UserDeck.objects.all().order_by('-id')
-    serializer_class = UserDeckSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            serializer_class = UserDeckCreateSerializer
+        else:
+            serializer_class = UserDeckSerializer
+
+        return serializer_class
 
     @action(methods=['get'], detail=False)
     def user_list(self, request):
