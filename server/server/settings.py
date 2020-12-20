@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'djoser',
 
     # own
-
+    'deck',
+    'card',
 ]
 
 MIDDLEWARE = [
