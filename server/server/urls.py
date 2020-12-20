@@ -28,7 +28,7 @@ router.register(r'cards', CardViewSet, 'card')
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('api/', include(router.urls)),
+    re_path(r'^api/', include(router.urls)),
     re_path(r'^auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.jwt')),
     re_path(r'', views.index, name="index")
