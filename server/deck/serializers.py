@@ -15,3 +15,4 @@ class UserDeckSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserDeck
         fields = ['id', 'user_id', 'deck_id', 'cards']
+
