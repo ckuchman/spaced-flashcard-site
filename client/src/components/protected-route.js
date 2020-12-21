@@ -21,21 +21,21 @@ const PrivateRoute = (props) => {
     authService.logout();
     return <Redirect to="/login" />;
   }
-  /* refresh the token */
-  /* get the localstorage data */
-  let payload = {
-    url: process.env.REACT_APP_BASE_URL + "auth/jwt/refresh/",
-    method: "POST",
-    auth: false,
-    body: {
-      refresh: authService.currentUserValue.refresh,
-    },
-  };
-  fetchCall(payload).then((response) => {
-    let local = JSON.parse(localStorage.getItem("currentUser"));
-    local.access = response.access;
-    localStorage.setItem("currentUser", JSON.stringify(local));
-  });
+  // /* refresh the token */
+  // /* get the localstorage data */
+  // let payload = {
+  //   url: process.env.REACT_APP_BASE_URL + "auth/jwt/refresh/",
+  //   method: "POST",
+  //   auth: false,
+  //   body: {
+  //     refresh: authService.currentUserValue.refresh,
+  //   },
+  // };
+  // fetchCall(payload).then((response) => {
+  //   let local = JSON.parse(localStorage.getItem("currentUser"));
+  //   local.access = response.access;
+  //   localStorage.setItem("currentUser", JSON.stringify(local));
+  // });
 
   return authenticated ? (
     <Route path={props.path} exact={props.exact}>

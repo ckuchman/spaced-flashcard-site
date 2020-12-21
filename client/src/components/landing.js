@@ -1,7 +1,20 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { Card, Container, Button } from "react-bootstrap";
 
 function LandingPage() {
+  const history = useHistory();
+
+  function handleRegister() {
+    history.push("/register");
+    return;
+  }
+
+  function handleLogin() {
+    history.push("/login");
+    return;
+  }
+
   return (
     <>
       <Container
@@ -34,10 +47,16 @@ function LandingPage() {
               strategy for memory retention and learning. What topic would you
               like to know more completely?
             </Card.Text>
-            <Button style={{ marginRight: "25px" }} variant="primary" href="/login">
+            <Button
+              onClick={handleLogin}
+              style={{ marginRight: "25px" }}
+              variant="primary"
+            >
               Login
             </Button>
-            <Button variant="primary" href="/register">Register in Seconds</Button>
+            <Button onClick={handleRegister} variant="primary">
+              Register in Seconds
+            </Button>
           </Card.Body>
         </Card>
       </Container>

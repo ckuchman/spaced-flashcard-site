@@ -42,7 +42,10 @@ export default function Register() {
     jwtresponse.userData = { username, email };
     console.log(`response to jwt call is: ${JSON.stringify(jwtresponse)}`);
     authService.newUser(jwtresponse);
-    history.push("/profile");
+    history.push({
+      pathname: "/profile",
+      state: response,
+    });
 
     return;
   }
