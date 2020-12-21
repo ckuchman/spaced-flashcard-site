@@ -11,5 +11,6 @@ class Deck(models.Model):
 class UserDeck(models.Model):
     user_id = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True, db_column="user_id")
-    deck_id = models.ForeignKey(Deck, on_delete=models.SET_NULL, null=True db_column="deck_id")
+    deck_id = models.ForeignKey(
+        Deck, on_delete=models.SET_NULL, null=True, db_column="deck_id")
     date_created = models.DateTimeField(null=True)
