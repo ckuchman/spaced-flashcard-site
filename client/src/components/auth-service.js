@@ -1,4 +1,6 @@
+import { Redirect } from "react-router";
 import { BehaviorSubject } from "rxjs";
+import { fetchCall } from "./helpers";
 
 const currentUserSubject = new BehaviorSubject(
   JSON.parse(localStorage.getItem("currentUser"))
@@ -33,7 +35,29 @@ function logout() {
 /* re-authenticate user (refresh jwt) */
 /* TODO */
 async function updateUserData() {
-  return;
+  let payload = {
+    url: process.env.REACT_APP_BASE_URL + "auth/jwt/refresh",
+    method: "POST",
+    auth: false,
+    body: {
+      refresh: authService.currentUserValue.refresh,
+    },
+  };
+  try {
+    let response = await fetchCall(payload);
+    console.log("refreshing user jwt, response is:", JSON.stringify(response));
+    let local = JSON.parse(localStorage.getItem("currentUser"));
+    local.access = response.access;
+    localStorage.setItem("currentUser", JSON.stringify(local));
+    currentUserSubject.next(local);
+    return;
+  } catch (err) {
+    /* TODO: error handling... */
+    alert("error refreshing jwt!  logging you out!");
+    console.error(err);
+    authService.logout();
+    return <Redirect to="/login" />;
+  }
 }
 
 /* if new user has registered, logs them in and sets state */
