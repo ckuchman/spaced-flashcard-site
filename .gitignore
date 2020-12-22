@@ -11,10 +11,10 @@ env
 client/coverage
 
 # production
-# client/build
+client/build
 
 # database
-server/db.sqlite3
+**.sqlite3
 
 # misc
 **/.DS_Store

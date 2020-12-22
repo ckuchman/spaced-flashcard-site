@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Dropdown, DropdownButton } from "react-bootstrap";
-import { useHistory, useLocation } from "react-router";
+import { useHistory } from "react-router";
 import AddDeck from "./add-deck";
+import { authService } from "./auth-service";
 import CreateCard from "./create-card";
 import { fetchCall } from "./helpers";
 
@@ -10,13 +11,26 @@ import { fetchCall } from "./helpers";
 //   { id: 12, user_id: 4, deck_id: 9 },
 // ];
 
-export default function Profile() {
+export default function Profile(props) {
   const history = useHistory();
-  const location = useLocation();
   const [decks, setDecks] = useState([]);
   const [addingDeck, setAddingDeck] = useState(false);
   const [addingCard, setAddingCard] = useState(false);
   const [selectedDeck, setSelectedDeck] = useState({ deck_name: "My Decks" });
+
+  console.log(
+    `in the Profile page, i was passed these props: ${JSON.stringify(props)}`
+  );
+  // console.log(JSON.stringify(props.currentUser.userData.id));
+
+  const currentUser =
+    props.currentUser && props.currentUser.userData
+      ? props.currentUser.userData.id
+      : authService.currentUserValue.userData
+      ? authService.currentUserValue.userData.id
+      : null;
+
+  console.log("current user is:", currentUser);
 
   useEffect(() => {
     /* on component load, fetch user's decks from backend, add to state */
@@ -28,37 +42,29 @@ export default function Profile() {
       let payload = {
         url:
           process.env.REACT_APP_BASE_URL +
-          `api/userdecks/user_list/?user=${location.state.id}`,
+          `api/userdecks/user_list/?user=${currentUser}`,
         method: "GET",
         auth: true,
       };
-      let deckPayload = {
-        url: process.env.REACT_APP_BASE_URL + "api/decks/",
-        method: "GET",
-        auth: true,
-      };
+      // let deckPayload = {
+      //   url: process.env.REACT_APP_BASE_URL + "api/decks/",
+      //   method: "GET",
+      //   auth: true,
+      // };
       try {
         let response = await fetchCall(payload);
         console.log(
           "response received from userdecks/user_list/",
           JSON.stringify(response)
         );
-        let deckResponse = await fetchCall(deckPayload);
-        let fullDecks = [];
-        for (const element of deckResponse) {
-          let obj = response.find((object) => object.deck_id === element.id);
-          if (obj !== undefined) {
-            let toAdd = {
-              id: obj.id,
-              deck_id: obj.deck_id,
-              user_id: obj.user_id,
-              deck_name: element.deck_name,
-              deck_description: element.deck_description,
-            };
-            fullDecks.push(toAdd);
-          }
+        // let deckResponse = await fetchCall(deckPayload);
+        for (let element of response) {
+          element.user_id = element.user_id.id;
+          element.deck_name = element.deck_id.deck_name;
+          element.deck_description = element.deck_id.deck_description;
+          element.deck_id = element.deck_id.id;
         }
-        setDecks(fullDecks);
+        setDecks(response);
       } catch (err) {
         console.error(err);
         /* logout??? */
@@ -81,17 +87,13 @@ export default function Profile() {
       <Dropdown.Item
         as="button"
         key={index}
-        onClick={(e) => setSelectedDeck(deck)}
+        onClick={() => setSelectedDeck(deck)}
       >{`${deck.deck_name} - ${deck.deck_description}`}</Dropdown.Item>
     );
   });
 
   function handleClick() {
-    history.push({
-      pathname: "/rundeck",
-      state: { user_deck_id: selectedDeck.id, user_id: location.state.id },
-    });
-
+    history.push(`/rundeck/:${selectedDeck.id}`);
     return;
   }
 
@@ -119,7 +121,7 @@ export default function Profile() {
         </Button>
       )}
       {addingDeck && (
-        <AddDeck userId={location.state.id} deckCallback={deckCallback} />
+        <AddDeck userId={currentUser} deckCallback={deckCallback} />
       )}
       {addingCard && <CreateCard cardCallback={cardCallback} decks={decks} />}
       <h1>Learn</h1>

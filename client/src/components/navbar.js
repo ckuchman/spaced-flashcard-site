@@ -1,28 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {  } from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { useLocation } from "react-router";
-import { authService } from "./auth-service";
-import {useHistory} from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
-export default function NavBar() {
+export default function NavBar(props) {
   const history = useHistory();
-  const [currentUser, setCurrentUser] = useState(null);
-  const location = useLocation();
-
-  useEffect(() => {
-    const subscription = authService.currentUser.subscribe((user) =>
-      setCurrentUser(user)
-    );
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [currentUser]);
-
-  function logoutHelper() {
-    authService.logout();
-    history.push("/");
-
-  }
 
   return (
     <>
@@ -35,7 +16,7 @@ export default function NavBar() {
               My Decks
             </Nav.Link>
           </Nav>
-          {!currentUser ? (
+          {!props.currentUser || !props.isAuthenticated() ? (
             <Nav variant="pills">
               <Nav.Link eventKey="3" href="/login">
                 Login
@@ -46,8 +27,15 @@ export default function NavBar() {
             </Nav>
           ) : (
             <>
-              <p>{`welcome back, ${currentUser.userData.username}`}</p>
-              <Button onClick={logoutHelper}>Logout!</Button>
+              <p>{`welcome back, ${props.currentUser.userData.username}`}</p>
+              <Button
+                onClick={() => {
+                  props.logoutHelper();
+                  history.push("/");
+                }}
+              >
+                Logout!
+              </Button>
             </>
           )}
         </Navbar.Collapse>
