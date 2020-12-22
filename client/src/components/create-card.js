@@ -34,7 +34,14 @@ export default function CreateCard(props) {
         for (const element of response) {
           let obj = props.decks.find((object) => object.deck_id === element.id);
           if (obj !== undefined) {
-            fullDecks.push({ ...obj, ...element });
+            let toAdd = {
+              id: obj.id,
+              deck_id: obj.deck_id,
+              user_id: obj.user_id,
+              deck_name: element.deck_name,
+              deck_description: element.deck_description,
+            };
+            fullDecks.push(toAdd);
           }
         }
         setDecks(fullDecks);
@@ -65,7 +72,7 @@ export default function CreateCard(props) {
       body: {
         question: fields.question,
         answer: fields.answer,
-        deck_id: selectedDeck.id,
+        user_deck_id: selectedDeck.id,
         next_time_to_show: "2020-10-12T00:00",
       },
     };
@@ -165,8 +172,14 @@ export default function CreateCard(props) {
                   <button type="submit" className="btn btn-primary mr-2">
                     Create Card!
                   </button>
-                  <button type="reset" className="btn btn-secondary">
-                    Reset
+                  <button
+                    onClick={() => {
+                      props.cardCallback();
+                    }}
+                    type="reset"
+                    className="btn btn-secondary"
+                  >
+                    Hide
                   </button>
                 </div>
               </Form>

@@ -40,11 +40,15 @@ export default function AddDeck(props) {
         method: "POST",
         auth: true,
         body: {
-          user_id: props.user_id,
+          user_id: props.userId,
           deck_id: response.id,
         },
       };
-      let userDeckResponse = await fetchCall(payload);
+      console.log(
+        "the payload i'm sending to api/userdecks/ is:",
+        userDeckPayload
+      );
+      let userDeckResponse = await fetchCall(userDeckPayload);
       console.log(`userdeck response is ${JSON.stringify(userDeckResponse)}`);
       /* this will be rendered as a subcomponent in /profile... so after
        * the deck is created, just refresh the page? */
@@ -122,8 +126,14 @@ export default function AddDeck(props) {
                   <button type="submit" className="btn btn-primary mr-2">
                     Create Deck!
                   </button>
-                  <button type="reset" className="btn btn-secondary">
-                    Reset
+                  <button
+                    onClick={() => {
+                      props.deckCallback();
+                    }}
+                    type="reset"
+                    className="btn btn-secondary"
+                  >
+                    Hide
                   </button>
                 </div>
               </Form>

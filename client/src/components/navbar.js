@@ -27,15 +27,12 @@ export default function NavBar() {
   return (
     <>
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="/">Spaced Flashcards</Navbar.Brand>
+        <Navbar.Brand href="/profile">Spaced Flashcards</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav variant="pills" className="mr-auto">
-            <Nav.Link eventKey="1" href="/decks">
+            <Nav.Link eventKey="1" href="/profile">
               My Decks
-            </Nav.Link>
-            <Nav.Link eventKey="2" href="/search">
-              Search Decks
             </Nav.Link>
           </Nav>
           {!currentUser ? (
