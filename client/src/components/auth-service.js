@@ -1,6 +1,7 @@
 import { Redirect } from "react-router";
 import { BehaviorSubject } from "rxjs";
 import { fetchCall } from "./helpers";
+import jwt_decode from "jwt-decode";
 
 const currentUserSubject = new BehaviorSubject(
   JSON.parse(localStorage.getItem("currentUser"))
@@ -13,6 +14,7 @@ export const authService = {
   authHeader,
   newUser,
   updateUserData,
+  isAuthenticated,
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() {
     return currentUserSubject.value;
@@ -28,8 +30,20 @@ async function login(userData) {
 
 /* log user out: clear localStorage and push null to observable */
 function logout() {
+  alert("logout function called!");
   localStorage.clear();
   currentUserSubject.next(null);
+}
+
+function isAuthenticated() {
+  return !authService.currentUserValue || !localStorage.getItem("currentUser")
+    ? false
+    : !(
+        new Date(1000 * jwt_decode(authService.currentUserValue.refresh).exp) >
+        new Date()
+      )
+    ? false
+    : true;
 }
 
 /* re-authenticate user (refresh jwt) */

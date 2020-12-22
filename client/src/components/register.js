@@ -17,40 +17,39 @@ export default function Register() {
     confirmPassword: "",
   };
 
-  async function handleSubmit(fields) {
-    console.log(fields);
-    alert(`submit registration data to backend: ${JSON.stringify(fields)}`);
-    const { email, username, password } = fields;
+  async function handleSubmit(values, actions) {
+    console.log(`the actions is ${JSON.stringify(actions)}`);
     let payload = {
       url: process.env.REACT_APP_BASE_URL + "auth/users/",
       method: "POST",
       auth: false,
       body: {
-        username: username,
-        email: email,
-        password: password,
+        username: values?.username,
+        email: values?.email,
+        password: values?.password,
       },
     };
-    let response = await fetchCall(payload);
-    console.log(
-      `response to register user call is: ${JSON.stringify(response)}`
-    );
-
-    /* now that user has been created, get the jwt */
-    payload.url = process.env.REACT_APP_BASE_URL + "auth/jwt/create/";
-    let jwtresponse = await fetchCall(payload);
-    jwtresponse.userData = { username, email };
-    console.log(`response to jwt call is: ${JSON.stringify(jwtresponse)}`);
-    authService.newUser(jwtresponse);
-    history.push({
-      pathname: "/profile",
-      state: response,
-    });
-
-    return;
+    try {
+      let response = await fetchCall(payload);
+      console.log(
+        `response to register user call is: ${JSON.stringify(response)}`
+      );
+      /* now that user has been created, get the jwt */
+      payload.url = process.env.REACT_APP_BASE_URL + "auth/jwt/create/";
+      let jwtresponse = await fetchCall(payload);
+      jwtresponse.userData = { response };
+      console.log(`response to jwt call is: ${JSON.stringify(jwtresponse)}`);
+      authService.newUser(jwtresponse);
+      toast.success(`Registration successful!  Welcome, ${response?.username}`);
+      history.push("/profile");
+      return;
+    } catch (err) {
+      console.error(err);
+      toast.error("Registration error!  Pls try again!");
+      actions.resetForm();
+      return;
+    }
   }
-
-  console.log(`the base url is: ${process.env.REACT_APP_BASE_URL}`);
 
   return (
     <>
@@ -78,9 +77,7 @@ export default function Register() {
                 .oneOf([Yup.ref("password"), null], "Passwords don't match!!")
                 .required(requiredMsg),
             })}
-            onSubmit={(fields) => {
-              handleSubmit(fields);
-            }}
+            onSubmit={handleSubmit}
             render={({ errors, touched }) => (
               <Form>
                 <div className="form-group">

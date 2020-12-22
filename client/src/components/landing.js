@@ -2,8 +2,19 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { Card, Container, Button } from "react-bootstrap";
 
-function LandingPage() {
+/* props will be null/undef or contain logged in user localdata */
+function LandingPage(props) {
   const history = useHistory();
+
+  console.log(
+    `in landing page, props i was passed are: ${JSON.stringify(props)}`
+  );
+
+  /* if a user is logged in, redirect to profile page */
+  // if (props.currentUser) {
+  //   history.push("/profile");
+  //   return null;
+  // }
 
   function handleRegister() {
     history.push("/register");

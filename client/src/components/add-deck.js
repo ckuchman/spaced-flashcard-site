@@ -4,6 +4,7 @@ import { Card } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useHistory } from "react-router";
+import { toast } from "react-toastify";
 
 /* will prob need userid in props */
 export default function AddDeck(props) {
@@ -52,6 +53,7 @@ export default function AddDeck(props) {
       console.log(`userdeck response is ${JSON.stringify(userDeckResponse)}`);
       /* this will be rendered as a subcomponent in /profile... so after
        * the deck is created, just refresh the page? */
+      toast.success(`Created deck: ${response.deck_name}`);
       props.deckCallback();
       history.push("/temp");
       history.goBack();

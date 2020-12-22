@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { Formik, Field, Form, ErrorMessage } from "formik";
@@ -15,46 +15,47 @@ export default function Login() {
     password: "",
   };
 
-  async function handleSubmit(fields) {
-    console.log(fields);
-    // alert(`submit login data to backend: ${JSON.stringify(fields)}`);
-    const { username, password } = fields;
-    let payload = {
+  async function handleSubmit(values, actions) {
+    const payload = {
       url: process.env.REACT_APP_BASE_URL + "auth/jwt/create/",
       method: "POST",
       auth: false,
       body: {
-        username: username,
-        password: password,
+        username: values?.username,
+        password: values?.password,
       },
     };
     try {
       let response = await fetchCall(payload);
-      response.userData = { username };
       console.log(`response to login call is ${JSON.stringify(response)}`);
-      authService.login(response);
-      /* now fetch the userId */
-      console.log(authService.currentUserValue);
-      let idPayload = {
-        url: process.env.REACT_APP_BASE_URL + "auth/users/",
-        method: "GET",
-        auth: true,
+      let headers = {
+        "Content-Type": "application/json",
+        Authorization: `JWT ${response?.access}`,
       };
-      let idResponse = await fetchCall(idPayload);
+      let idResponse = await fetch(
+        `${process.env.REACT_APP_BASE_URL}auth/users/`,
+        { headers }
+      );
+      idResponse = await idResponse.json();
       console.log(
         `the response from getting id is: ${JSON.stringify(idResponse)}`
       );
-      history.push({
-        pathname: "/profile",
-        state: idResponse[0],
-      });
+      response.userData = { ...idResponse[0] };
+      authService.login(response);
+      console.log(
+        `after logging in, authservice currentuserval is: ${JSON.stringify(
+          authService.currentUserValue
+        )}`
+      );
+      history.push("/profile");
       return;
     } catch (err) {
       /* todo: error handling */
       console.error(err);
-      toast.error(`Invalid login info, please retry!`);
-      history.push("/temp");
-      history.goBack();
+      toast.error(`Login error, please retry!`);
+      // history.push("/temp");
+      // history.goBack();
+      actions.resetForm();
       return;
     }
   }
@@ -78,9 +79,7 @@ export default function Login() {
                 .min(6, "Password must be at least 6 characters!!")
                 .required(requiredMsg),
             })}
-            onSubmit={(fields) => {
-              handleSubmit(fields);
-            }}
+            onSubmit={handleSubmit}
             render={({ errors, touched }) => (
               <Form>
                 <div className="form-group">
