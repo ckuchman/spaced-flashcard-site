@@ -37,7 +37,7 @@ export default function Register() {
       /* now that user has been created, get the jwt */
       payload.url = process.env.REACT_APP_BASE_URL + "auth/jwt/create/";
       let jwtresponse = await fetchCall(payload);
-      jwtresponse.userData = { response };
+      jwtresponse.userData = { ...response };
       console.log(`response to jwt call is: ${JSON.stringify(jwtresponse)}`);
       authService.newUser(jwtresponse);
       toast.success(`Registration successful!  Welcome, ${response?.username}`);

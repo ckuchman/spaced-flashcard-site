@@ -46,33 +46,25 @@ export default function Profile(props) {
         method: "GET",
         auth: true,
       };
-      let deckPayload = {
-        url: process.env.REACT_APP_BASE_URL + "api/decks/",
-        method: "GET",
-        auth: true,
-      };
+      // let deckPayload = {
+      //   url: process.env.REACT_APP_BASE_URL + "api/decks/",
+      //   method: "GET",
+      //   auth: true,
+      // };
       try {
         let response = await fetchCall(payload);
         console.log(
           "response received from userdecks/user_list/",
           JSON.stringify(response)
         );
-        let deckResponse = await fetchCall(deckPayload);
-        let fullDecks = [];
-        for (const element of deckResponse) {
-          let obj = response.find((object) => object.deck_id === element.id);
-          if (obj !== undefined) {
-            let toAdd = {
-              id: obj.id,
-              deck_id: obj.deck_id,
-              user_id: obj.user_id,
-              deck_name: element.deck_name,
-              deck_description: element.deck_description,
-            };
-            fullDecks.push(toAdd);
-          }
+        // let deckResponse = await fetchCall(deckPayload);
+        for (let element of response) {
+          element.user_id = element.user_id.id;
+          element.deck_name = element.deck_id.deck_name;
+          element.deck_description = element.deck_id.deck_description;
+          element.deck_id = element.deck_id.id;
         }
-        setDecks(fullDecks);
+        setDecks(response);
       } catch (err) {
         console.error(err);
         /* logout??? */
@@ -101,11 +93,7 @@ export default function Profile(props) {
   });
 
   function handleClick() {
-    history.push({
-      pathname: "/rundeck",
-      state: { user_deck_id: selectedDeck.id, user_id: props.currentUser },
-    });
-
+    history.push(`/rundeck/:${selectedDeck.id}`);
     return;
   }
 

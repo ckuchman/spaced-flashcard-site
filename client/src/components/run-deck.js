@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import CardDisplay from "./card-display";
 import DeckInfo from "./deck-info";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { fetchCall } from "./helpers";
 
 // const sampleDeck = [
@@ -16,13 +16,15 @@ import { fetchCall } from "./helpers";
 // ];
 
 /* props should contain either the deck card data itself or the deck_id */
-export default function RunDeck() {
-  const location = useLocation();
+export default function RunDeck(props) {
   const history = useHistory();
   const [cardIndex, setCardIndex] = useState(0);
-  const user_deck_id = location.state.user_deck_id;
   const [cards, setCards] = useState([]);
 
+  let { user_deck_id } = props.match.params;
+  user_deck_id = user_deck_id.substring(1);
+  console.log(`props.match.params is: ${JSON.stringify(props.match.params)}`);
+  console.log(`user_deck_id i set is: ${user_deck_id}`);
   useEffect(() => {
     async function fetchData() {
       let payload = {
@@ -54,10 +56,7 @@ export default function RunDeck() {
   }
 
   function redirectHome() {
-    history.push({
-      pathname: "/profile",
-      state: { user_id: location.state.user_id },
-    });
+    history.push("/profile");
     return;
   }
 

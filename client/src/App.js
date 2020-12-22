@@ -65,16 +65,16 @@ function App() {
               path="/"
               render={(props) =>
                 currentUser &&
-                  currentUser.access &&
-                  authService.isAuthenticated() ? (
-                    <Redirect to="/profile" />
-                  ) : (
-                    <LandingPage
-                      {...props}
-                      currentUser={currentUser}
-                      isAuthenticated={authService.isAuthenticated}
-                    />
-                  )
+                currentUser.access &&
+                authService.isAuthenticated() ? (
+                  <Redirect to="/profile" />
+                ) : (
+                  <LandingPage
+                    {...props}
+                    currentUser={currentUser}
+                    isAuthenticated={authService.isAuthenticated}
+                  />
+                )
               }
             />
             <Route
@@ -82,12 +82,12 @@ function App() {
               path="/register"
               render={(props) =>
                 currentUser &&
-                  currentUser.access &&
-                  authService.isAuthenticated() ? (
-                    <Redirect to="/profile" />
-                  ) : (
-                    <Register {...props} currentUser={currentUser} />
-                  )
+                currentUser.access &&
+                authService.isAuthenticated() ? (
+                  <Redirect to="/profile" />
+                ) : (
+                  <Register {...props} currentUser={currentUser} />
+                )
               }
             />
             <Route
@@ -95,17 +95,17 @@ function App() {
               path="/login"
               render={(props) =>
                 currentUser &&
-                  currentUser.access &&
-                  authService.isAuthenticated() ? (
-                    <Redirect to="/profile" />
-                  ) : (
-                    <Login {...props} currentUser={currentUser} />
-                  )
+                currentUser.access &&
+                authService.isAuthenticated() ? (
+                  <Redirect to="/profile" />
+                ) : (
+                  <Login {...props} currentUser={currentUser} />
+                )
               }
             />
             <PrivateRoute
               exact
-              path="/rundeck"
+              path="/rundeck/:user_deck_id"
               component={RunDeck}
               isAuthenticated={authService.isAuthenticated}
               currentUser={currentUser}
