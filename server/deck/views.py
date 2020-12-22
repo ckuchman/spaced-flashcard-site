@@ -37,6 +37,7 @@ class UserDeckViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def user_list(self, request):
+        print(request.query_params)
         if 'user' not in request.query_params:
             return Response({'error': 'must pass id value'}, status=status.HTTP_400_BAD_REQUEST)
 
