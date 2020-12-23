@@ -27,7 +27,7 @@ export async function fetchCall(payload) {
   }
   const returnError = {
     type: "error",
-    message: returnData.detail || returnData.error || "Something went wrong!",
+    message: returnData.detail || returnData.error || null,
     status: statusCode,
     statusText: response.statusText,
     data: returnData,

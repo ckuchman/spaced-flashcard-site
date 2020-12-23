@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import ReactCardFlip from "react-card-flip";
 import RateCard from "./rate-card";
@@ -6,7 +6,7 @@ import RateCard from "./rate-card";
 /* props should contain question: string, answer: string, card_id: num */
 export default function CardDisplay(props) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [rating, setRating] = useState("");
+  const [, setRating] = useState("");
 
   function handleClick(event) {
     event.preventDefault();

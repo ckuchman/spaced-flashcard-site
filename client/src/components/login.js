@@ -16,14 +16,13 @@ export default function Login() {
   };
 
   async function handleSubmit(values, actions) {
-    authService.logout();
     const payload = {
       url: process.env.REACT_APP_BASE_URL + "auth/jwt/create/",
       method: "POST",
       auth: false,
       body: {
-        username: values?.username,
-        password: values?.password,
+        username: values.username,
+        password: values.password,
       },
     };
     try {
@@ -48,20 +47,18 @@ export default function Login() {
           authService.currentUserValue
         )}`
       );
+      toast.success(`Welcome back, ${values.username}!`);
       history.push("/profile");
       return;
     } catch (err) {
-      /* todo: error handling */
       console.log(JSON.stringify(err));
       toast.error(
         <div style={{ textAlign: "center" }}>
           {`Login Error!`}
           <br />
-          {err.data.detail}
+          {err.message}
         </div>
       );
-      // history.push("/temp");
-      // history.goBack();
       actions.resetForm();
       return;
     }
@@ -87,7 +84,8 @@ export default function Login() {
                 .required(requiredMsg),
             })}
             onSubmit={handleSubmit}
-            render={({ errors, touched }) => (
+          >
+            {({ errors, touched }) => (
               <Form>
                 <div className="form-group">
                   <label htmlFor="username">Username (email)</label>
@@ -131,7 +129,7 @@ export default function Login() {
                 </div>
               </Form>
             )}
-          />
+          </Formik>
         </Card.Body>
       </Card>
     </>

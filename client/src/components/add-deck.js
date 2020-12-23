@@ -15,13 +15,13 @@ export default function AddDeck(props) {
   };
   const requiredMsg = "This field is required!!";
 
-  async function handleSubmit(fields) {
+  async function handleSubmit(values, actions) {
     console.log(
       `create deck handle submit: props i was passed are: ${JSON.stringify(
-        fields
+        values
       )}`
     );
-    const { deck_name, deck_description } = fields;
+    const { deck_name, deck_description } = values;
     try {
       /* create the deck itself */
       let payload = {
@@ -49,9 +49,10 @@ export default function AddDeck(props) {
       let userDeckResponse = await fetchCall(userDeckPayload);
       console.log(`userdeck response is ${JSON.stringify(userDeckResponse)}`);
       toast.success(`Created deck: ${response.deck_name}`);
-      props.deckCallback();
-      history.push("/temp");
-      history.goBack();
+      props.deckRerender();
+      actions.resetForm();
+      // history.push("/temp");
+      // history.goBack();
       return;
     } catch (err) {
       console.log(err);
@@ -60,48 +61,51 @@ export default function AddDeck(props) {
   }
 
   return (
-    <>
-      <Card className="text-center">
-        <Card.Body>
+    <Card style={{ height: "100%" }}>
+      <Card.Body
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-evenly",
+        }}
+      >
+        <div className="mb-auto">
           <Card.Header style={{ fontSize: "32px" }}>
             Create New Deck
           </Card.Header>
           <Card.Subtitle
             className="mb-2 text-muted"
-            style={{ marginTop: "10px" }}
+            style={{ marginTop: "25px" }}
           >
             Name your new deck and give a description!
           </Card.Subtitle>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={Yup.object().shape({
-              deck_name: Yup.string().required(requiredMsg),
-              deck_description: Yup.string().required(requiredMsg),
-            })}
-            onSubmit={(fields) => {
-              handleSubmit(fields);
-            }}
-            render={({ errors, touched }) => (
-              <Form>
-                <div className="form-group">
-                  <label htmlFor="deck_name">Deck Name</label>
-                  <Field
-                    name="deck_name"
-                    type="text"
-                    className={
-                      "form-control" +
-                      (errors.deck_name && touched.deck_name
-                        ? " is-invalid"
-                        : "")
-                    }
-                  />
-                  <ErrorMessage
-                    name="deck_name"
-                    component="div"
-                    className="invalid-feedback"
-                  />
-                </div>
-                <div className="form-group">
+        </div>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={Yup.object().shape({
+            deck_name: Yup.string().required(requiredMsg),
+            deck_description: Yup.string().required(requiredMsg),
+          })}
+          onSubmit={handleSubmit}
+        >
+          {({ errors, touched }) => (
+            <Form>
+              <div className="form-group pb-4">
+                <label htmlFor="deck_name">Deck Name</label>
+                <Field
+                  name="deck_name"
+                  type="text"
+                  className={
+                    "form-control" +
+                    (errors.deck_name && touched.deck_name ? " is-invalid" : "")
+                  }
+                />
+                <ErrorMessage
+                  name="deck_name"
+                  component="div"
+                  className="invalid-feedback"
+                />
+                <div className="form-group pt-4">
                   <label htmlFor="deck_description">Deck Description</label>
                   <Field
                     name="deck_description"
@@ -119,25 +123,25 @@ export default function AddDeck(props) {
                     className="invalid-feedback"
                   />
                 </div>
-                <div className="form-group">
-                  <button type="submit" className="btn btn-primary mr-2">
-                    Create Deck!
-                  </button>
-                  <button
-                    onClick={() => {
-                      props.deckCallback();
-                    }}
-                    type="reset"
-                    className="btn btn-secondary"
-                  >
-                    Hide
-                  </button>
-                </div>
-              </Form>
-            )}
-          />
-        </Card.Body>
-      </Card>
-    </>
+              </div>
+              <div className="form-group">
+                <button type="submit" className="btn btn-primary mr-2">
+                  Create Deck!
+                </button>
+                <button
+                  type="reset"
+                  className="btn btn-secondary"
+                  onClick={() => {
+                    props.deckCallback();
+                  }}
+                >
+                  Hide
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </Card.Body>
+    </Card>
   );
 }

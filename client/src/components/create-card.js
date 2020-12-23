@@ -91,7 +91,8 @@ export default function CreateCard(props) {
               handleSubmit(fields);
               actions.resetForm({ fields: { question: "", answer: "" } });
             }}
-            render={({ errors, touched }) => (
+          >
+            {({ errors, touched }) => (
               <Form>
                 <div className="form-group">
                   <label htmlFor="question">Question</label>
@@ -143,7 +144,7 @@ export default function CreateCard(props) {
                 </div>
               </Form>
             )}
-          />
+          </Formik>
         </Card.Body>
       </Card>
     </>

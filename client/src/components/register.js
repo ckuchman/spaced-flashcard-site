@@ -18,15 +18,14 @@ export default function Register() {
   };
 
   async function handleSubmit(values, actions) {
-    console.log(`the actions is ${JSON.stringify(actions)}`);
     let payload = {
       url: process.env.REACT_APP_BASE_URL + "auth/users/",
       method: "POST",
       auth: false,
       body: {
-        username: values?.username,
-        email: values?.email,
-        password: values?.password,
+        username: values.username,
+        email: values.email,
+        password: values.password,
       },
     };
     try {
@@ -84,7 +83,8 @@ export default function Register() {
                 .required(requiredMsg),
             })}
             onSubmit={handleSubmit}
-            render={({ errors, touched }) => (
+          >
+            {({ errors, touched }) => (
               <Form>
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
@@ -162,7 +162,7 @@ export default function Register() {
                 </div>
               </Form>
             )}
-          />
+          </Formik>
         </Card.Body>
       </Card>
     </>

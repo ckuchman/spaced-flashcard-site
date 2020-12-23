@@ -12,7 +12,6 @@ export const authService = {
   login,
   logout,
   authHeader,
-  newUser,
   updateUserData,
   isAuthenticated,
   currentUser: currentUserSubject.asObservable(),
@@ -23,9 +22,14 @@ export const authService = {
 
 /* store userData in local storage and update authentication state by
  * pushing to the observable */
-async function login(userData) {
-  localStorage.setItem("currentUser", JSON.stringify(userData));
-  currentUserSubject.next(userData);
+async function login(res) {
+  if (!res.refresh || !res.access || !res.userData?.id) {
+    /* should not be possible */
+    authService.logout();
+    return;
+  }
+  localStorage.setItem("currentUser", JSON.stringify(res));
+  currentUserSubject.next(res);
 }
 
 /* log user out: clear localStorage and push null to observable */
@@ -69,21 +73,10 @@ async function updateUserData() {
     return;
   } catch (err) {
     /* TODO: error handling... */
-    alert("error refreshing jwt!  logging you out!");
-    console.error(err);
+    alert("Stale login info!  Logging you out!");
     authService.logout();
     return <Redirect to="/login" />;
   }
-}
-
-/* if new user has registered, logs them in and sets state */
-function newUser(res) {
-  if (!res.refresh || !res.access) {
-    /* should not be possible */
-    return logout();
-  }
-  localStorage.setItem("currentUser", JSON.stringify(res));
-  currentUserSubject.next(res);
 }
 
 /* returns HTTP authorization header containing JWT of currently logged-in

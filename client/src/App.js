@@ -19,6 +19,7 @@ import RunDeck from "./components/run-deck";
 import CreateCard from "./components/create-card";
 import AddDeck from "./components/add-deck";
 import { authService } from "./components/auth-service";
+import Create from "./components/create";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -36,6 +37,12 @@ function App() {
     };
   }, [currentUser, validUser]);
 
+  let authProps = {
+    currentUser: currentUser,
+    isAuthenticated: authService.isAuthenticated,
+    logoutHelper: authService.logout,
+  };
+
   return (
     <>
       <ToastContainer
@@ -47,14 +54,10 @@ function App() {
         pauseOnFocusLoss={false}
         draggable
         pauseOnHover
-        style={{marginTop: "25px"}}
+        style={{ marginTop: "25px" }}
       />
       <Router>
-        <NavBar
-          currentUser={currentUser}
-          isAuthenticated={authService.isAuthenticated}
-          logoutHelper={authService.logout}
-        />
+        <NavBar {...authProps} />
         <Container
           className="center"
           fluid="md"
@@ -65,16 +68,10 @@ function App() {
               exact
               path="/"
               render={(props) =>
-                currentUser &&
-                currentUser.access &&
-                authService.isAuthenticated() ? (
+                currentUser?.access && authService.isAuthenticated() ? (
                   <Redirect to="/profile" />
                 ) : (
-                  <LandingPage
-                    {...props}
-                    currentUser={currentUser}
-                    isAuthenticated={authService.isAuthenticated}
-                  />
+                  <LandingPage {...props} />
                 )
               }
             />
@@ -82,12 +79,10 @@ function App() {
               exact
               path="/register"
               render={(props) =>
-                currentUser &&
-                currentUser.access &&
-                authService.isAuthenticated() ? (
+                currentUser?.access && authService.isAuthenticated() ? (
                   <Redirect to="/profile" />
                 ) : (
-                  <Register {...props} currentUser={currentUser} />
+                  <Register {...props} />
                 )
               }
             />
@@ -95,12 +90,10 @@ function App() {
               exact
               path="/login"
               render={(props) =>
-                currentUser &&
-                currentUser.access &&
-                authService.isAuthenticated() ? (
+                currentUser?.access && authService.isAuthenticated() ? (
                   <Redirect to="/profile" />
                 ) : (
-                  <Login {...props} currentUser={currentUser} />
+                  <Login {...props} />
                 )
               }
             />
@@ -108,30 +101,31 @@ function App() {
               exact
               path="/rundeck/:user_deck_id"
               component={RunDeck}
-              isAuthenticated={authService.isAuthenticated}
-              currentUser={currentUser}
+              {...authProps}
             />
             <PrivateRoute
               exact
               path="/profile"
               component={Profile}
-              isAuthenticated={authService.isAuthenticated}
-              currentUser={currentUser}
-              logoutHelper={authService.logout}
+              {...authProps}
+            />
+            <PrivateRoute
+              exact
+              path="/create"
+              component={Create}
+              {...authProps}
             />
             <PrivateRoute
               exact
               path="/createcard"
               component={CreateCard}
-              isAuthenticated={authService.isAuthenticated}
-              currentUser={currentUser}
+              {...authProps}
             />
             <PrivateRoute
               exact
               path="/createdeck"
               component={AddDeck}
-              isAuthenticated={authService.isAuthenticated}
-              currentUser={currentUser}
+              {...authProps}
             />
           </Switch>
         </Container>

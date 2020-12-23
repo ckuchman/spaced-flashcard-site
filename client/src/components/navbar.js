@@ -1,4 +1,4 @@
-import React, {  } from "react";
+import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
@@ -14,6 +14,9 @@ export default function NavBar(props) {
           <Nav variant="pills" className="mr-auto">
             <Nav.Link eventKey="1" href="/profile">
               My Decks
+            </Nav.Link>
+            <Nav.Link eventKey="2" href="/create">
+              Create
             </Nav.Link>
           </Nav>
           {!props.currentUser || !props.isAuthenticated() ? (
