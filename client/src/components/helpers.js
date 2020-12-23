@@ -14,9 +14,25 @@ export async function fetchCall(payload) {
       : { "Content-Type": "application/json" },
     body: JSON.stringify(payload.body),
   });
-  if (response.status >= 400) {
-    /* TODO: error handle */
-  } else {
-    return await response.json();
+  let statusCode = response.status;
+  let returnData = await response.json();
+  console.log(
+    `responsse received from fetch: ${JSON.stringify(
+      returnData
+    )} with status code: ${statusCode}`
+  );
+  if (!(statusCode >= 400)) {
+    console.log(`the status code is ${statusCode}, so i'm returning`);
+    return returnData;
   }
+  const returnError = {
+    type: "error",
+    message: returnData.detail || returnData.error || "Something went wrong!",
+    status: statusCode,
+    statusText: response.statusText,
+    data: returnData,
+  };
+  let error = new Error();
+  error = { ...error, ...returnError };
+  throw error;
 }

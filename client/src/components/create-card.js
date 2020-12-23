@@ -6,60 +6,17 @@ import { fetchCall } from "./helpers";
 
 /* need deck id in props */
 export default function CreateCard(props) {
-  const [decks, setDecks] = useState([]);
+  const [selectedDeck, setSelectedDeck] = useState({
+    deck_name: "Select Deck!",
+  });
   const initialValues = {
     question: "",
     answer: "",
   };
   const requiredMsg = "This field is required!!";
-  const [selectedDeck, setSelectedDeck] = useState({
-    deck_name: "Select Deck!",
-  });
-
-  useEffect(() => {
-    /* get all the user's deck info */
-    setSelectedDeck({
-      deck_name: "Select Deck!",
-    });
-    async function fetchData() {
-      let payload = {
-        url: process.env.REACT_APP_BASE_URL + `api/decks/`,
-        method: "GET",
-        auth: true,
-      };
-      try {
-        let response = await fetchCall(payload);
-        console.log(`full list of decks is ${JSON.stringify(response)}`);
-        let fullDecks = [];
-        for (const element of response) {
-          let obj = props.decks.find((object) => object.deck_id === element.id);
-          if (obj !== undefined) {
-            let toAdd = {
-              id: obj.id,
-              deck_id: obj.deck_id,
-              user_id: obj.user_id,
-              deck_name: element.deck_name,
-              deck_description: element.deck_description,
-            };
-            fullDecks.push(toAdd);
-          }
-        }
-        setDecks(fullDecks);
-        return;
-      } catch (err) {
-        console.error(err);
-        return;
-        /* logout??? */
-      }
-    }
-    fetchData();
-  }, []);
+  const decks = props?.decks || [];
 
   async function handleSubmit(fields) {
-    if (selectedDeck.deck_name === "Select Deck!") {
-      alert("please select (or create) a deck first!");
-      return;
-    }
     console.log(
       `create card handle submit: props i was passed are: ${JSON.stringify(
         fields
@@ -98,10 +55,6 @@ export default function CreateCard(props) {
     );
   });
 
-  // function handleSelect(event) {
-  //   setSelectedDeck(decks.find((object) => object.id === event.id));
-  // }
-
   return (
     <>
       <Card className="text-center">
@@ -118,7 +71,6 @@ export default function CreateCard(props) {
           <DropdownButton
             id="dropdown-basic-button"
             title={`${selectedDeck.deck_name}`}
-            // onSelect={handleSelect}
           >
             {deckDropdown}
           </DropdownButton>
@@ -129,6 +81,13 @@ export default function CreateCard(props) {
               answer: Yup.string().required(requiredMsg),
             })}
             onSubmit={(fields, actions) => {
+              if (
+                !selectedDeck?.deck_name ||
+                selectedDeck.deck_name === "Select Deck!"
+              ) {
+                alert("Please select or create a deck first!");
+                return;
+              }
               handleSubmit(fields);
               actions.resetForm({ fields: { question: "", answer: "" } });
             }}

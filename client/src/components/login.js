@@ -16,6 +16,7 @@ export default function Login() {
   };
 
   async function handleSubmit(values, actions) {
+    authService.logout();
     const payload = {
       url: process.env.REACT_APP_BASE_URL + "auth/jwt/create/",
       method: "POST",
@@ -51,8 +52,14 @@ export default function Login() {
       return;
     } catch (err) {
       /* todo: error handling */
-      console.error(err);
-      toast.error(`Login error, please retry!`);
+      console.log(JSON.stringify(err));
+      toast.error(
+        <div style={{ textAlign: "center" }}>
+          {`Login Error!`}
+          <br />
+          {err.data.detail}
+        </div>
+      );
       // history.push("/temp");
       // history.goBack();
       actions.resetForm();

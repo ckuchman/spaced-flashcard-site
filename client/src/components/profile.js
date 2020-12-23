@@ -5,11 +5,7 @@ import AddDeck from "./add-deck";
 import { authService } from "./auth-service";
 import CreateCard from "./create-card";
 import { fetchCall } from "./helpers";
-
-// const sampleDecks = [
-//   { id: 13, user_id: 4, deck_id: 8 },
-//   { id: 12, user_id: 4, deck_id: 9 },
-// ];
+import { toast } from "react-toastify";
 
 export default function Profile(props) {
   const history = useHistory();
@@ -18,24 +14,23 @@ export default function Profile(props) {
   const [addingCard, setAddingCard] = useState(false);
   const [selectedDeck, setSelectedDeck] = useState({ deck_name: "My Decks" });
 
+  
   console.log(
     `in the Profile page, i was passed these props: ${JSON.stringify(props)}`
   );
-  // console.log(JSON.stringify(props.currentUser.userData.id));
-
   const currentUser =
-    props.currentUser && props.currentUser.userData
-      ? props.currentUser.userData.id
-      : authService.currentUserValue.userData
-      ? authService.currentUserValue.userData.id
-      : null;
-
+    props.currentUser?.userData?.id ||
+    authService.currentUserValue?.userData?.id;
   console.log("current user is:", currentUser);
 
   useEffect(() => {
-    /* on component load, fetch user's decks from backend, add to state */
-    // alert("fetch user's decks");
-    /* temporary */
+    /* log out if no user data was passed */
+    if (!currentUser) {
+      alert("Error retrieving logged-in user data!  Logging you out!");
+      props.logoutHelper();
+      history.push("/");
+      return;
+    }
     setAddingCard(false);
     setAddingDeck(false);
     async function fetchData() {
@@ -46,18 +41,12 @@ export default function Profile(props) {
         method: "GET",
         auth: true,
       };
-      // let deckPayload = {
-      //   url: process.env.REACT_APP_BASE_URL + "api/decks/",
-      //   method: "GET",
-      //   auth: true,
-      // };
       try {
         let response = await fetchCall(payload);
         console.log(
           "response received from userdecks/user_list/",
           JSON.stringify(response)
         );
-        // let deckResponse = await fetchCall(deckPayload);
         for (let element of response) {
           element.user_id = element.user_id.id;
           element.deck_name = element.deck_id.deck_name;
@@ -66,6 +55,7 @@ export default function Profile(props) {
         }
         setDecks(response);
       } catch (err) {
+
         console.error(err);
         /* logout??? */
       }

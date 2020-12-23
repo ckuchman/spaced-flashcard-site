@@ -44,8 +44,14 @@ export default function Register() {
       history.push("/profile");
       return;
     } catch (err) {
-      console.error(err);
-      toast.error("Registration error!  Pls try again!");
+      let msg = err.data.username || err.data.password || err.data.email;
+      toast.error(
+        <div>
+          {"Registration Error!"}
+          <br />
+          {msg}
+        </div>
+      );
       actions.resetForm();
       return;
     }

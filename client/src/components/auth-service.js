@@ -30,13 +30,15 @@ async function login(userData) {
 
 /* log user out: clear localStorage and push null to observable */
 function logout() {
-  alert("logout function called!");
+  //alert("logout function called!");
   localStorage.clear();
   currentUserSubject.next(null);
 }
 
 function isAuthenticated() {
-  return !authService.currentUserValue || !localStorage.getItem("currentUser")
+  return !authService.currentUserValue ||
+    !localStorage.getItem("currentUser") ||
+    !authService.currentUserValue.refresh
     ? false
     : !(
         new Date(1000 * jwt_decode(authService.currentUserValue.refresh).exp) >

@@ -47,6 +47,7 @@ function App() {
         pauseOnFocusLoss={false}
         draggable
         pauseOnHover
+        style={{marginTop: "25px"}}
       />
       <Router>
         <NavBar
@@ -116,6 +117,7 @@ function App() {
               component={Profile}
               isAuthenticated={authService.isAuthenticated}
               currentUser={currentUser}
+              logoutHelper={authService.logout}
             />
             <PrivateRoute
               exact

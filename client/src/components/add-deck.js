@@ -23,6 +23,7 @@ export default function AddDeck(props) {
     );
     const { deck_name, deck_description } = fields;
     try {
+      /* create the deck itself */
       let payload = {
         url: process.env.REACT_APP_BASE_URL + "api/decks/",
         method: "POST",
@@ -45,14 +46,8 @@ export default function AddDeck(props) {
           deck_id: response.id,
         },
       };
-      console.log(
-        "the payload i'm sending to api/userdecks/ is:",
-        userDeckPayload
-      );
       let userDeckResponse = await fetchCall(userDeckPayload);
       console.log(`userdeck response is ${JSON.stringify(userDeckResponse)}`);
-      /* this will be rendered as a subcomponent in /profile... so after
-       * the deck is created, just refresh the page? */
       toast.success(`Created deck: ${response.deck_name}`);
       props.deckCallback();
       history.push("/temp");
