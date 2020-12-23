@@ -9,6 +9,8 @@ class CardSerializer(serializers.ModelSerializer):
         depth = 1
 
 
+# Serializer only for POST creations to minimize information sent back
+# and properly populate foreign fields (doen not seem to work with __all__)
 class CardCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
