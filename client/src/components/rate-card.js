@@ -2,8 +2,16 @@ import React from "react";
 import { Container, Button, Row, Col } from "react-bootstrap";
 
 export default function RateCard(props) {
+  /* based on which button was clicked, add the appropriate amount of time for
+   * next display of card */
   function handleClick(rating) {
-    props.handleRate(rating);
+    let currentDate = new Date();
+    let newDate = new Date(
+      currentDate.getTime() +
+        7 *
+          (rating === "easy" ? 86400000 : rating === "medium" ? 3600000 : 60000)
+    );
+    props.handleRate(newDate);
   }
 
   return (
@@ -38,7 +46,7 @@ export default function RateCard(props) {
                 handleClick("hard");
               }}
             >
-              Hard -  7 Minutes
+              Hard - 7 Minutes
             </Button>
           </Col>
         </Row>

@@ -66,12 +66,7 @@ export default function RunDeck(props) {
       {cards.length > 0 && cardIndex !== -1 ? (
         <>
           <DeckInfo numCards={cards.length} cardIndex={cardIndex} />
-          <CardDisplay
-            index={cardIndex}
-            question={cards[cardIndex].question}
-            answer={cards[cardIndex].answer}
-            nextCard={nextCard}
-          />
+          <CardDisplay cardData={cards[cardIndex]} nextCard={nextCard} />
         </>
       ) : (
         <>
