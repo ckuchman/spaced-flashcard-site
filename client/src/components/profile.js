@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Button, Dropdown, DropdownButton } from "react-bootstrap";
-import { useHistory } from "react-router";
-import AddDeck from "./add-deck";
+import { Dropdown } from "react-bootstrap";
+import { Redirect, useHistory } from "react-router";
 import { authService } from "./auth-service";
-import CreateCard from "./create-card";
 import { fetchCall } from "./helpers";
-import { toast } from "react-toastify";
 import MyDecks from "./my-decks";
 
 export default function Profile(props) {
   const history = useHistory();
   const [decks, setDecks] = useState([]);
-  const [selectedDeck, setSelectedDeck] = useState({ deck_name: "My Decks" });
 
   console.log(
     `in the Profile page, i was passed these props: ${JSON.stringify(props)}`
@@ -54,17 +50,6 @@ export default function Profile(props) {
     fetchData();
   }, []);
 
-  const deckDropdown = [];
-  decks.forEach((deck, index) => {
-    deckDropdown.push(
-      <Dropdown.Item
-        as="button"
-        key={index}
-        onClick={() => setSelectedDeck(deck)}
-      >{`${deck.deck_name} - ${deck.deck_description}`}</Dropdown.Item>
-    );
-  });
-
   function handleRun(userDeckId) {
     history.push(`/rundeck/:${userDeckId}`);
     return;
@@ -83,7 +68,9 @@ export default function Profile(props) {
 
   /* i need to pass all of the userdeck ids to the create card component, then
    * do a dropdown to select the deck */
-  return (
+  return !props.currentUser?.userData?.id ? (
+    <Redirect to="/" />
+  ) : (
     <>
       <MyDecks
         data={tableData}
