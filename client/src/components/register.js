@@ -30,14 +30,10 @@ export default function Register() {
     };
     try {
       let response = await fetchCall(payload);
-      console.log(
-        `response to register user call is: ${JSON.stringify(response)}`
-      );
       /* now that user has been created, get the jwt */
       payload.url = process.env.REACT_APP_BASE_URL + "auth/jwt/create/";
       let jwtresponse = await fetchCall(payload);
       jwtresponse.userData = { ...response };
-      console.log(`response to jwt call is: ${JSON.stringify(jwtresponse)}`);
       authService.login(jwtresponse);
       toast.success(`Registration successful!  Welcome, ${response?.username}`);
       history.push("/profile");
@@ -60,7 +56,15 @@ export default function Register() {
     <>
       <Card className="text-center">
         <Card.Body>
-          <Card.Header style={{ fontSize: "32px" }}>Register</Card.Header>
+          <Card.Header
+            style={{
+              fontSize: "32px",
+              backgroundColor: "lightgray",
+              fontFamily: "'Lalezar', cursive",
+            }}
+          >
+            Register
+          </Card.Header>
           <Card.Subtitle
             className="mb-2 text-muted"
             style={{ marginTop: "10px" }}

@@ -7,38 +7,56 @@ export default function NavBar(props) {
 
   return (
     <>
-      <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="/profile">Spaced Flashcards</Navbar.Brand>
+      <Navbar bg="dark" expand="md">
+        <Navbar.Brand href="/profile" style={{ color: "whitesmoke" }}>
+          Spaced Flashcards
+        </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav variant="pills" className="mr-auto">
-            <Nav.Link eventKey="1" href="/profile">
-              My Decks
-            </Nav.Link>
-            <Nav.Link eventKey="2" href="/create">
+            <Nav.Link
+              eventKey="1"
+              style={{ color: "whitesmoke" }}
+              href="/create"
+            >
               Create
             </Nav.Link>
           </Nav>
           {!props.currentUser || !props.isAuthenticated() ? (
             <Nav variant="pills">
-              <Nav.Link eventKey="3" href="/login">
+              <Nav.Link
+                eventKey="2"
+                href="/login"
+                style={{ color: "whitesmoke" }}
+              >
                 Login
               </Nav.Link>
-              <Nav.Link eventKey="4" href="/register">
+              <Nav.Link
+                eventKey="3"
+                style={{ color: "whitesmoke" }}
+                href="/register"
+              >
                 Register
               </Nav.Link>
             </Nav>
           ) : (
             <>
-              <p>{`welcome back, ${props.currentUser.userData.username}`}</p>
-              <Button
-                onClick={() => {
-                  props.logoutHelper();
-                  history.push("/");
-                }}
-              >
-                Logout!
-              </Button>
+              <Nav.Item style={{ marginRight: "5%", color: "whitesmoke" }}>
+                <>{`welcome back, ${
+                  props.currentUser.userData.username.split("@")[0]
+                }`}</>
+              </Nav.Item>
+              <Nav.Item>
+                <Button
+                  variant="light"
+                  onClick={() => {
+                    props.logoutHelper();
+                    history.push("/");
+                  }}
+                >
+                  Logout!
+                </Button>
+              </Nav.Item>
             </>
           )}
         </Navbar.Collapse>

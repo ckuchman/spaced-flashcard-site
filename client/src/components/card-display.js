@@ -26,11 +26,6 @@ export default function CardDisplay(props) {
     };
     try {
       let response = await fetchCall(payload);
-      console.log(
-        `response i received from updating card date is: ${JSON.stringify(
-          response
-        )}`
-      );
       toast.success(
         `Next display time set: ${new Date(response.next_time_to_show)}`,
         {

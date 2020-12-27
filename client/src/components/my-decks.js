@@ -17,7 +17,7 @@ export default function MyDecks(props) {
 
   return (
     <>
-      <h1>{props.title}</h1>
+      <h1 style={{ fontFamily: "'Lalezar', cursive" }}>{props.title}</h1>
       <MaterialTable
         options={{
           ...props.options,
@@ -36,6 +36,12 @@ export default function MyDecks(props) {
             showSelectAllCheckbox: false,
             search: false,
             sorting: true,
+            headerStyle: {
+              backgroundColor: "lightslategrey",
+              color: "#FFF",
+              fontSize: "16px",
+              whiteSpace: "nowrap",
+            },
           },
         }}
         columns={[

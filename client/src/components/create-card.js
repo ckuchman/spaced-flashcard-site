@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, Dropdown, DropdownButton } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { fetchCall } from "./helpers";
+import { toast } from "react-toastify";
 
 /* need deck id in props */
 export default function CreateCard(props) {
@@ -17,11 +18,6 @@ export default function CreateCard(props) {
   const decks = props?.decks || [];
 
   async function handleSubmit(fields) {
-    console.log(
-      `create card handle submit: props i was passed are: ${JSON.stringify(
-        fields
-      )}`
-    );
     let payload = {
       url: process.env.REACT_APP_BASE_URL + "api/cards/",
       method: "POST",
@@ -35,11 +31,9 @@ export default function CreateCard(props) {
     };
     try {
       let response = await fetchCall(payload);
-      console.log(
-        `card creation request response is : ${JSON.stringify(response)}`
-      );
+      toast.success("Card successfully added to deck!");
     } catch (err) {
-      console.error(err);
+      toast.error("Error adding card!");
       return;
     }
   }
@@ -50,7 +44,7 @@ export default function CreateCard(props) {
       <Dropdown.Item
         as="button"
         key={index}
-        onClick={(e) => setSelectedDeck(deck)}
+        onClick={() => setSelectedDeck(deck)}
       >{`${deck.deck_name} - ${deck.deck_description}`}</Dropdown.Item>
     );
   });
@@ -128,8 +122,11 @@ export default function CreateCard(props) {
                     className="invalid-feedback"
                   />
                 </div>
-                <div className="form-group">
-                  <button type="submit" className="btn btn-primary mr-2">
+                <div
+                  className="form-group"
+                  style={{ display: "flex", justifyContent: "space-evenly" }}
+                >
+                  <button type="submit" className="btn btn-primary">
                     Create Card!
                   </button>
                   <button

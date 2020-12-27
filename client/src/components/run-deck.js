@@ -5,17 +5,6 @@ import DeckInfo from "./deck-info";
 import { useHistory } from "react-router-dom";
 import { fetchCall } from "./helpers";
 
-// const sampleDeck = [
-//   { question: "2+2=", answer: "4" },
-//   { question: "2+3=", answer: "5" },
-//   { question: "2+4=", answer: "6" },
-//   { question: "2+5=", answer: "7" },
-//   { question: "2+6=", answer: "8" },
-//   { question: "2+7=", answer: "9" },
-//   { question: "2+8=", answer: "10" },
-// ];
-
-/* props should contain either the deck card data itself or the deck_id */
 export default function RunDeck(props) {
   const history = useHistory();
   const [cardIndex, setCardIndex] = useState(0);
@@ -33,11 +22,6 @@ export default function RunDeck(props) {
         auth: true,
       };
       let response = await fetchCall(payload);
-      console.log(
-        `returned list of cards for deck with user_deck_id=${user_deck_id} is: ${JSON.stringify(
-          response
-        )}`
-      );
       setCards(response);
     }
     fetchData();

@@ -1,4 +1,3 @@
-import { Redirect } from "react-router";
 import { BehaviorSubject } from "rxjs";
 import { fetchCall } from "./helpers";
 import jwt_decode from "jwt-decode";
@@ -70,7 +69,6 @@ async function updateUserData() {
       throw new Error("User not logged in or expired credentials!");
     }
     let response = await fetchCall(payload);
-    console.log("refreshing user jwt, response is:", JSON.stringify(response));
     local.access = response.access;
     localStorage.setItem("currentUser", JSON.stringify(local));
     currentUserSubject.next(local);

@@ -1,20 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Card, Container, Button } from "react-bootstrap";
+import { Card, Container, Button, Row } from "react-bootstrap";
 
-/* props will be null/undef or contain logged in user localdata */
 function LandingPage(props) {
   const history = useHistory();
-
-  console.log(
-    `in landing page, props i was passed are: ${JSON.stringify(props)}`
-  );
-
-  /* if a user is logged in, redirect to profile page */
-  // if (props.currentUser) {
-  //   history.push("/profile");
-  //   return null;
-  // }
 
   function handleRegister() {
     history.push("/register");
@@ -35,39 +24,35 @@ function LandingPage(props) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          marginTop: "20%",
+          marginTop: "10%",
         }}
       >
-        <head>
-          <title>Spaced Flashcards Project - OSU Winter Hackathon 2020</title>
-        </head>
-        <h1>Spaced Flashcards</h1>
-
+        <h1 style={{ marginBottom: "10%", fontFamily: "'Frijole', cursive" }}>
+          Spaced Flashcards
+        </h1>
         <Card
           style={{
-            width: "50%",
             flex: "1",
-            marginLeft: "auto",
-            marginRight: "auto",
+            backgroundColor: "lightgray",
           }}
         >
           <Card.Body>
-            <Card.Title>A Proven System</Card.Title>
+            <Card.Title style={{ fontFamily: "'Lalezar', cursive" }}>
+              A Proven System
+            </Card.Title>
             <Card.Text>
               Research shows that spaced repetition is an extremely effective
               strategy for memory retention and learning. What topic would you
               like to know more completely?
             </Card.Text>
-            <Button
-              onClick={handleLogin}
-              style={{ marginRight: "25px" }}
-              variant="primary"
-            >
-              Login
-            </Button>
-            <Button onClick={handleRegister} variant="primary">
-              Register in Seconds
-            </Button>
+            <Row style={{ display: "flex", justifyContent: "space-evenly" }}>
+              <Button onClick={handleLogin} variant="primary">
+                Login
+              </Button>
+              <Button onClick={handleRegister} variant="primary">
+                Register in Seconds
+              </Button>
+            </Row>
           </Card.Body>
         </Card>
       </Container>

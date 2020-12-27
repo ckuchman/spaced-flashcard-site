@@ -2,7 +2,6 @@ import { authService } from "./auth-service";
 
 /* general configurable helper function to send POST requests to the server */
 export async function fetchCall(payload) {
-  console.log(authService.currentUserValue);
   if (payload.auth && authService.currentUserValue.refresh) {
     /* refresh the jwt */
     await authService.updateUserData();
@@ -16,13 +15,7 @@ export async function fetchCall(payload) {
   });
   let statusCode = response.status;
   let returnData = await response.json();
-  console.log(
-    `responsse received from fetch: ${JSON.stringify(
-      returnData
-    )} with status code: ${statusCode}`
-  );
   if (!(statusCode >= 400)) {
-    console.log(`the status code is ${statusCode}, so i'm returning`);
     return returnData;
   }
   const returnError = {

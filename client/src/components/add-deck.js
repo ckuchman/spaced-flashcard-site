@@ -3,12 +3,9 @@ import { fetchCall } from "./helpers";
 import { Card } from "react-bootstrap";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useHistory } from "react-router";
 import { toast } from "react-toastify";
 
-/* will prob need userid in props */
 export default function AddDeck(props) {
-  const history = useHistory();
   const initialValues = {
     deck_name: "",
     deck_description: "",
@@ -16,11 +13,6 @@ export default function AddDeck(props) {
   const requiredMsg = "This field is required!!";
 
   async function handleSubmit(values, actions) {
-    console.log(
-      `create deck handle submit: props i was passed are: ${JSON.stringify(
-        values
-      )}`
-    );
     const { deck_name, deck_description } = values;
     try {
       /* create the deck itself */
@@ -34,28 +26,19 @@ export default function AddDeck(props) {
         },
       };
       let response = await fetchCall(payload);
-      console.log(
-        `the response from create deck is ${JSON.stringify(response)}`
-      );
-      let userDeckPayload = {
-        url: process.env.REACT_APP_BASE_URL + "api/userdecks/",
-        method: "POST",
-        auth: true,
-        body: {
-          user_id: props.userId,
-          deck_id: response.id,
-        },
+      /* create the user:deck relationship */
+      payload.url = process.env.REACT_APP_BASE_URL + "api/userdecks/";
+      payload.body = {
+        user_id: props.userId,
+        deck_id: response.id,
       };
-      let userDeckResponse = await fetchCall(userDeckPayload);
-      console.log(`userdeck response is ${JSON.stringify(userDeckResponse)}`);
+      await fetchCall(payload);
       toast.success(`Created deck: ${response.deck_name}`);
       props.deckRerender();
       actions.resetForm();
-      // history.push("/temp");
-      // history.goBack();
       return;
     } catch (err) {
-      console.log(err);
+      toast.error("Error creating deck!");
       return;
     }
   }
@@ -124,8 +107,11 @@ export default function AddDeck(props) {
                   />
                 </div>
               </div>
-              <div className="form-group">
-                <button type="submit" className="btn btn-primary mr-2">
+              <div
+                className="form-group"
+                style={{ display: "flex", justifyContent: "space-evenly" }}
+              >
+                <button type="submit" className="btn btn-primary">
                   Create Deck!
                 </button>
                 <button

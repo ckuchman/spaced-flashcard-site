@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Dropdown } from "react-bootstrap";
 import { Redirect, useHistory } from "react-router";
 import { authService } from "./auth-service";
 import { fetchCall } from "./helpers";
@@ -11,9 +10,6 @@ export default function Profile(props) {
   const [decks, setDecks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(
-    `in the Profile page, i was passed these props: ${JSON.stringify(props)}`
-  );
   const currentUser =
     props?.currentUser?.userData?.id ||
     authService.currentUserValue?.userData?.id;
@@ -30,10 +26,6 @@ export default function Profile(props) {
       };
       try {
         let response = await fetchCall(payload);
-        console.log(
-          "response received from userdecks/user_list/",
-          JSON.stringify(response)
-        );
         for (let element of response) {
           element.user_id = element.user_id.id;
           element.deck_name = element.deck_id.deck_name;

@@ -24,8 +24,6 @@ import Create from "./components/create";
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
-  console.log(`the base url is: ${process.env.REACT_APP_BASE_URL}`);
-
   useEffect(() => {
     const subscription = authService.currentUser.subscribe((user) =>
       setCurrentUser(user)
@@ -52,7 +50,7 @@ function App() {
         pauseOnFocusLoss={false}
         draggable
         pauseOnHover
-        style={{ marginTop: "25px" }}
+        style={{ marginTop: "40px", textAlign: "center" }}
       />
       <Router>
         <NavBar {...authProps} />

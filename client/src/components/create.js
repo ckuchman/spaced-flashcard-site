@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { useHistory } from "react-router";
 import AddDeck from "./add-deck";
 import { authService } from "./auth-service";
@@ -14,9 +14,6 @@ export default function Create(props) {
   const [addingCard, setAddingCard] = useState(false);
   const [newDeck, setNewDeck] = useState(0);
 
-  console.log(
-    `in the Create page, i was passed these props: ${JSON.stringify(props)}`
-  );
   const currentUser =
     props.currentUser?.userData?.id ||
     authService.currentUserValue?.userData?.id;
@@ -32,10 +29,6 @@ export default function Create(props) {
       };
       try {
         let response = await fetchCall(payload);
-        console.log(
-          "response received from userdecks/user_list/",
-          JSON.stringify(response)
-        );
         for (let element of response) {
           element.user_id = element.user_id.id;
           element.deck_name = element.deck_id.deck_name;
@@ -67,7 +60,9 @@ export default function Create(props) {
 
   return (
     <>
-      <h1>Create</h1>
+      <h1 style={{ fontFamily: "'Lalezar', cursive", fontSize: "64px" }}>
+        Create
+      </h1>
       <br />
       <h5 className="text-muted">
         <em>
@@ -75,9 +70,9 @@ export default function Create(props) {
           for you!
         </em>
       </h5>
-      <Container fluid="xl">
+      <Container fluid="md">
         <Row>
-          <Col xl="auto" style={{ flex: "1", padding: "50px" }}>
+          <Col md="auto" style={{ flex: "1", padding: "50px" }}>
             {!addingDeck ? (
               <Button
                 block
@@ -95,7 +90,7 @@ export default function Create(props) {
               />
             )}
           </Col>
-          <Col xl="auto" style={{ flex: "1", padding: "50px" }}>
+          <Col md="auto" style={{ flex: "1", padding: "50px" }}>
             {!addingCard ? (
               <Button
                 block

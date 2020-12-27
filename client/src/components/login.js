@@ -27,7 +27,6 @@ export default function Login() {
     };
     try {
       let response = await fetchCall(payload);
-      console.log(`response to login call is ${JSON.stringify(response)}`);
       let headers = {
         "Content-Type": "application/json",
         Authorization: `JWT ${response?.access}`,
@@ -37,21 +36,12 @@ export default function Login() {
         { headers }
       );
       idResponse = await idResponse.json();
-      console.log(
-        `the response from getting id is: ${JSON.stringify(idResponse)}`
-      );
       response.userData = { ...idResponse[0] };
       authService.login(response);
-      console.log(
-        `after logging in, authservice currentuserval is: ${JSON.stringify(
-          authService.currentUserValue
-        )}`
-      );
       toast.success(`Welcome back, ${values.username}!`);
       history.push("/profile");
       return;
     } catch (err) {
-      console.log(JSON.stringify(err));
       toast.error(
         <div style={{ textAlign: "center" }}>
           {`Login Error!`}
@@ -68,7 +58,15 @@ export default function Login() {
     <>
       <Card className="text-center">
         <Card.Body>
-          <Card.Header style={{ fontSize: "32px" }}>Login</Card.Header>
+          <Card.Header
+            style={{
+              fontSize: "32px",
+              backgroundColor: "lightgray",
+              fontFamily: "'Lalezar', cursive",
+            }}
+          >
+            Login
+          </Card.Header>
           <Card.Subtitle
             className="mb-2 text-muted"
             style={{ marginTop: "10px" }}
