@@ -9,19 +9,13 @@ import RateCard from "./rate-card";
 export default function CardDisplay(props) {
   const [isFlipped, setIsFlipped] = useState(false);
 
-  console.log(`props i have in carddisplay are: ${JSON.stringify(props)}`);
-
   function handleClick(event) {
     event.preventDefault();
     setIsFlipped(!isFlipped);
   }
 
   async function handleRate(inputRating) {
-    console.log(`in card-display, setting rating of card to ${inputRating}`);
-
     /* now, update the show date */
-    /* to update show date, i need an id (card), question, answer, next_time_to_show, and user_deck_id */
-
     let payload = {
       url: `${process.env.REACT_APP_BASE_URL}api/cards/${props.cardData.id}/`,
       method: "PATCH",
@@ -38,15 +32,16 @@ export default function CardDisplay(props) {
         )}`
       );
       toast.success(
-        `Next display time set: ${new Date(response.next_time_to_show)}`
+        `Next display time set: ${new Date(response.next_time_to_show)}`,
+        {
+          autoClose: 2000,
+        }
       );
       setIsFlipped(false);
       props.nextCard();
     } catch (err) {
       toast.error(err.message);
     }
-
-    /* here, need to make API call to set the next display time of the current card */
   }
 
   return (

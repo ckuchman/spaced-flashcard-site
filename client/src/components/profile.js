@@ -4,10 +4,12 @@ import { Redirect, useHistory } from "react-router";
 import { authService } from "./auth-service";
 import { fetchCall } from "./helpers";
 import MyDecks from "./my-decks";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 export default function Profile(props) {
   const history = useHistory();
   const [decks, setDecks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   console.log(
     `in the Profile page, i was passed these props: ${JSON.stringify(props)}`
@@ -18,6 +20,7 @@ export default function Profile(props) {
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       let payload = {
         url:
           process.env.REACT_APP_BASE_URL +
@@ -39,9 +42,17 @@ export default function Profile(props) {
           payload.url =
             process.env.REACT_APP_BASE_URL +
             `api/userdecks/card_list/?userdeck=${element.id}`;
-          element.cards = await fetchCall(payload);
+          let response2 = await fetchCall(payload);
+          element.cards = response2;
+          element.numCards = response2.length;
+          payload.url =
+            process.env.REACT_APP_BASE_URL +
+            `api/userdecks/${element.id}/active_cards/`;
+          response2 = await fetchCall(payload);
+          element.availCards = response2.length;
         }
         setDecks(response);
+        setLoading(false);
       } catch (err) {
         console.error(err);
         /* logout??? */
@@ -55,11 +66,14 @@ export default function Profile(props) {
     return;
   }
 
-
   /* i need to pass all of the userdeck ids to the create card component, then
    * do a dropdown to select the deck */
   return !props.currentUser?.userData?.id ? (
     <Redirect to="/" />
+  ) : loading ? (
+    <div style={{ marginTop: "25%" }}>
+      <CircularProgress color="secondary" />
+    </div>
   ) : (
     <>
       <MyDecks

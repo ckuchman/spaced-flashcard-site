@@ -23,14 +23,12 @@ export default function RunDeck(props) {
 
   let { user_deck_id } = props.match.params;
   user_deck_id = user_deck_id.substring(1);
-  console.log(`props.match.params is: ${JSON.stringify(props.match.params)}`);
-  console.log(`user_deck_id i set is: ${user_deck_id}`);
   useEffect(() => {
     async function fetchData() {
       let payload = {
         url:
           process.env.REACT_APP_BASE_URL +
-          `api/userdecks/card_list/?userdeck=${user_deck_id}`,
+          `api/userdecks/${user_deck_id}/active_cards/`,
         method: "GET",
         auth: true,
       };
@@ -47,7 +45,6 @@ export default function RunDeck(props) {
 
   /* increases cardIndex to display the next card in deck */
   function nextCard() {
-    console.log(`i'm calling nextcard`);
     if (cardIndex !== cards.length - 1) {
       setCardIndex(cardIndex + 1);
     } else {
@@ -60,7 +57,6 @@ export default function RunDeck(props) {
     return;
   }
 
-  /* need to pass CardDisplay userid, deckid, etc.. */
   return (
     <>
       {cards.length > 0 && cardIndex !== -1 ? (
