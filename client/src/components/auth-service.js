@@ -2,6 +2,7 @@ import { Redirect } from "react-router";
 import { BehaviorSubject } from "rxjs";
 import { fetchCall } from "./helpers";
 import jwt_decode from "jwt-decode";
+import { toast } from "react-toastify";
 
 const currentUserSubject = new BehaviorSubject(
   JSON.parse(localStorage.getItem("currentUser"))
@@ -39,15 +40,15 @@ function logout() {
   currentUserSubject.next(null);
 }
 
+function validateExp(token) {
+  return new Date(1000 * jwt_decode(token).exp) > new Date() ? true : false;
+}
+
 function isAuthenticated() {
   return !authService.currentUserValue ||
     !localStorage.getItem("currentUser") ||
-    !authService.currentUserValue.refresh
-    ? false
-    : !(
-        new Date(1000 * jwt_decode(authService.currentUserValue.refresh).exp) >
-        new Date()
-      )
+    !authService.currentUserValue.refresh ||
+    !validateExp(authService.currentUserValue.refresh)
     ? false
     : true;
 }
@@ -60,22 +61,23 @@ async function updateUserData() {
     method: "POST",
     auth: false,
     body: {
-      refresh: authService.currentUserValue.refresh,
+      refresh: authService.currentUserValue?.refresh,
     },
   };
   try {
+    let local = JSON.parse(localStorage.getItem("currentUser"));
+    if (!local.refresh || !validateExp(local.refresh)) {
+      throw new Error("User not logged in or expired credentials!");
+    }
     let response = await fetchCall(payload);
     console.log("refreshing user jwt, response is:", JSON.stringify(response));
-    let local = JSON.parse(localStorage.getItem("currentUser"));
     local.access = response.access;
     localStorage.setItem("currentUser", JSON.stringify(local));
     currentUserSubject.next(local);
-    return;
   } catch (err) {
     /* TODO: error handling... */
-    alert("Stale login info!  Logging you out!");
+    toast.error(err.message);
     authService.logout();
-    return <Redirect to="/login" />;
   }
 }
 

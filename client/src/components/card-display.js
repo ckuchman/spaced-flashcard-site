@@ -1,22 +1,51 @@
 import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import ReactCardFlip from "react-card-flip";
+import { toast } from "react-toastify";
+import { fetchCall } from "./helpers";
 import RateCard from "./rate-card";
 
 /* props should contain question: string, answer: string, card_id: num */
 export default function CardDisplay(props) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [, setRating] = useState("");
+
+  console.log(`props i have in carddisplay are: ${JSON.stringify(props)}`);
 
   function handleClick(event) {
     event.preventDefault();
     setIsFlipped(!isFlipped);
   }
 
-  function handleRate(rating) {
-    setRating(rating);
-    setIsFlipped(false);
-    props.nextCard();
+  async function handleRate(inputRating) {
+    console.log(`in card-display, setting rating of card to ${inputRating}`);
+
+    /* now, update the show date */
+    /* to update show date, i need an id (card), question, answer, next_time_to_show, and user_deck_id */
+
+    let payload = {
+      url: `${process.env.REACT_APP_BASE_URL}api/cards/${props.cardData.id}/`,
+      method: "PATCH",
+      auth: true,
+      body: {
+        next_time_to_show: inputRating.toISOString(),
+      },
+    };
+    try {
+      let response = await fetchCall(payload);
+      console.log(
+        `response i received from updating card date is: ${JSON.stringify(
+          response
+        )}`
+      );
+      toast.success(
+        `Next display time set: ${new Date(response.next_time_to_show)}`
+      );
+      setIsFlipped(false);
+      props.nextCard();
+    } catch (err) {
+      toast.error(err.message);
+    }
+
     /* here, need to make API call to set the next display time of the current card */
   }
 
@@ -37,7 +66,9 @@ export default function CardDisplay(props) {
                 height: "420px",
               }}
             >
-              <Card.Text style={{ flex: "1" }}>{props.question}</Card.Text>
+              <Card.Text style={{ flex: "1" }}>
+                {props.cardData.question}
+              </Card.Text>
             </Card.Body>
           </Card>
         </a>
@@ -55,7 +86,9 @@ export default function CardDisplay(props) {
                 height: "420px",
               }}
             >
-              <Card.Text style={{ flex: "1" }}>{props.answer}</Card.Text>
+              <Card.Text style={{ flex: "1" }}>
+                {props.cardData.answer}
+              </Card.Text>
             </Card.Body>
           </Card>
         </a>

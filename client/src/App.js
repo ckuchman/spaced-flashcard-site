@@ -23,7 +23,6 @@ import Create from "./components/create";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
-  const [validUser, setValidUser] = useState(false);
 
   console.log(`the base url is: ${process.env.REACT_APP_BASE_URL}`);
 
@@ -31,11 +30,10 @@ function App() {
     const subscription = authService.currentUser.subscribe((user) =>
       setCurrentUser(user)
     );
-    setValidUser(authService.isAuthenticated());
     return () => {
       subscription.unsubscribe();
     };
-  }, [currentUser, validUser]);
+  }, [currentUser]);
 
   let authProps = {
     currentUser: currentUser,
@@ -125,6 +123,14 @@ function App() {
               exact
               path="/createdeck"
               component={AddDeck}
+              {...authProps}
+            />
+            <PrivateRoute
+              exact
+              path="/testroute"
+              component={(props) => {
+                return <h2>hey in authenticated component</h2>;
+              }}
               {...authProps}
             />
           </Switch>

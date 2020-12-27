@@ -38,7 +38,7 @@ export default function Register() {
       let jwtresponse = await fetchCall(payload);
       jwtresponse.userData = { ...response };
       console.log(`response to jwt call is: ${JSON.stringify(jwtresponse)}`);
-      authService.newUser(jwtresponse);
+      authService.login(jwtresponse);
       toast.success(`Registration successful!  Welcome, ${response?.username}`);
       history.push("/profile");
       return;

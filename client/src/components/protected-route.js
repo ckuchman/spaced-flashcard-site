@@ -3,17 +3,22 @@ import { Route, Redirect } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 
 /* TODO: this needs to refresh the jwt token */
-const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated() === true ? (
-        <Component {...props} {...rest} />
-      ) : (
-        <Redirect to="/" />
-      )
-    }
-  />
-);
-
-export default PrivateRoute;
+export default function PrivateRoute({
+  component: Component,
+  isAuthenticated,
+  ...rest
+}) {
+  console.log(`isAuthenticated() is: ${isAuthenticated()}`);
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        isAuthenticated() === true ? (
+          <Component {...props} {...rest} />
+        ) : (
+          <Redirect to="/" />
+        )
+      }
+    />
+  );
+}
