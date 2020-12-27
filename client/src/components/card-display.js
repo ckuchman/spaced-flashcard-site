@@ -23,15 +23,11 @@ export default function CardDisplay(props) {
     /* to update show date, i need an id (card), question, answer, next_time_to_show, and user_deck_id */
 
     let payload = {
-      url: process.env.REACT_APP_BASE_URL + "api/cards/",
-      method: "POST",
+      url: `${process.env.REACT_APP_BASE_URL}api/cards/${props.cardData.id}/`,
+      method: "PATCH",
       auth: true,
       body: {
-        id: props.cardData.id,
-        question: props.cardData.question,
-        answer: props.cardData.answer,
         next_time_to_show: inputRating.toISOString(),
-        user_deck_id: props.cardData.user_deck_id.id,
       },
     };
     try {

@@ -55,16 +55,6 @@ export default function Profile(props) {
     return;
   }
 
-  let tableData = [];
-  decks.forEach((deck) => {
-    tableData.push({
-      deckName: deck.deck_name,
-      description: deck.deck_description,
-      numCards: deck.cards.length,
-      available: deck.cards.length,
-      user_deck_id: deck.id,
-    });
-  });
 
   /* i need to pass all of the userdeck ids to the create card component, then
    * do a dropdown to select the deck */
@@ -73,9 +63,9 @@ export default function Profile(props) {
   ) : (
     <>
       <MyDecks
-        data={tableData}
         title={props.currentUser.userData.username.split("@")[0] + "'s Decks"}
         handleRun={handleRun}
+        decks={decks}
       />
     </>
   );
